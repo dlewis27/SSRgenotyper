@@ -3,11 +3,11 @@ find SSRs in a population
 
 SSRmulti will find simple sequence repeats of length 2,3, and 4 from given sam files and a reference. SSR with the same letters (i.e. GGG) or are lowercase will be excluded.
 
-MAKING THE REFERENCE:
+# MAKING THE REFERENCE:
 
 The reference is expected to be a .fasta file with a target SSR on each sequence. This can be created using MISA on a reference and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 75 bp upstream and downstream seems to work well. SSRmulti will find which SSR is on each sequence so this does not need to be provided. 
 
-PREPPING THE SAM FILES:
+## PREPPING THE SAM FILES:
 The sam files should be filtered for quality, the headers removed and only the first 10 row should be kept. This can be done with samtools and cut:
   samtools view -q 45 <samFile> | cut -f1-10 > <samFile>.f1
 The sam files should be provided in as a list in a text document with each file name on a new line. This can be done with:
