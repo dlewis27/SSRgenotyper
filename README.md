@@ -19,7 +19,7 @@ The script go through the reference file, finding the SSRs and the 2 flanking nu
 
 OUTPUT:
 
-A file "SSRoutput.ssr" with a tab separated table that includes the name of the reference sequence for the row names, and the first 7 characters in the names of the sam files for the column names. The elements of the table show the number of SSR units found. For example, "7-7" means that the SSR unit was found 7 times. This is likely a homogenous allele. If this were to show "7-6" then reads supporting an allele with 7 SSR units were found as well as reads supporting 6 SSR units. This is likely a hetrozygous allele. If "0-0" shows, then there was no call.
+A file with a tab separated table that includes the name of the reference sequence for the row names, and the first 7 characters in the names of the sam files for the column names. The elements of the table show the number of SSR units found. For example, "7-7" means that the SSR unit was found 7 times. This is likely a homogenous allele. If this were to show "7-6" then reads supporting an allele with 7 SSR units were found as well as reads supporting 6 SSR units. This is likely a hetrozygous allele. If "0-0" shows, then there was no call.
 
 EXAMPLE:
-python SSRmulti <referenceFile.fa> <mySamFiles.txt>
+python SSRFinder <referenceFile.fa> <mySamFiles.txt> <myOutput>
