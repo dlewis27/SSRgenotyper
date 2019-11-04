@@ -9,10 +9,10 @@ The reference is expected to be a .fasta file with a target SSR on each sequence
 
 For example:
 
-###### run misa
+##### run misa
 perl misa.pl myReference.fasta
 
-###### and misa.ini looks like this:
+##### and misa.ini looks like this:
 
 definition(unit_size,min_repeats):                   2-6 3-4 4-4
 
