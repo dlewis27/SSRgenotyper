@@ -1,11 +1,12 @@
-# SSRFinder
+# SSRgenotyper
 find SSRs in a population
 
-SSRmulti will find simple sequence repeats of length 2,3, and 4 from given sam files and a reference. SSR with the same letters (i.e. GGG) or are lowercase will be excluded.
+SSRmulti will find simple sequence repeats of length 2,3, and 4 from given sam files and a reference. SSR with the same letters (i.e. GGG) or are lowercase will be excluded. The output is a table that with the marker names and SSR alleles. 
 
 ## Making the Reference
 
-The reference is expected to be a .fasta file with a target SSR on each sequence. This can be created using MISA on a reference and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 75 bp upstream and downstream seems to work well. SSRmulti will find which SSR is on each sequence so this does not need to be provided. 
+The reference is expected to be a .fasta file with a target SSR on each sequence. This can be created using MISA on a reference and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 75 bp upstream and downstream seems to work well. SSRmulti will find which SSR is on each sequence so this does not need to be provided.
+
 
 ## Prepping the SAM Files
 The sam files should be filtered for quality, the headers removed and only the first 10 row should be kept. This can be done with samtools and cut:
@@ -15,7 +16,7 @@ The sam files should be provided in as a list in a text document with each file 
 
 ## How it Works
 
-The script go through the reference file, finding the SSRs and the 2 flanking nucleotides on both sides of the SSR. It then goes through each sam file, looks at the reads that mapped to the refeerence sequence, and looks for reads with the SSR pattern and a matching 2 flanking nucleotides.
+The script go through the reference file, finding the SSRs and the specified number of flanking nucleotides on both sides of the SSR. It then goes through each sam file, looks at the reads that mapped to the reference sequence, and looks for reads with the SSR pattern and matching flanking nucleotides.
 
 ## Output
 
@@ -23,18 +24,15 @@ A file with a tab separated table that includes the name of the reference sequen
 
 ## Options
 
-usage: SSRFinder.py [-h] [-A ALLELERATIO] [-R REFUNITS] [-P POPUNITS]
-                    [-F FLANKSIZE] [-S SUPPORT] [-W WINDOWOFFSET]
-                    ReferenceFile SamFiles OutputFile
+usage: python3 SSRFinder.py ReferenceFile SamFiles OutputFile
 
 positional arguments:
   ReferenceFile         The refrence file (FASTA)
   SamFiles              Text document with the SAM file names seperated by
                         newline
-  OutputFile            Output file name ( end with ".ssr")
+  OutputFile            Output file name ( ".ssr" will be added onto it)
 
 optional arguments:
-  -h, --help            show this help message and exit
   -A ALLELERATIO, --AlleleRatio ALLELERATIO
                         The minmum ration of major to minor alleles 
                         (default = .2)
