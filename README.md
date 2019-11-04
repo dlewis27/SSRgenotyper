@@ -28,29 +28,35 @@ usage: python3 SSRFinder.py ReferenceFile SamFiles OutputFile
 
 positional arguments:
 
-ReferenceFile         The refrence file (FASTA)
+**ReferenceFile** - The refrence file (FASTA)
 
-SamFiles              Text document with the SAM file names seperated by
+**SamFiles** - Text document with the SAM file names seperated by
                         newline
                         
-OutputFile            Output file name ( ".ssr" will be added onto it)
+**OutputFile** - Output file name ( ".ssr" will be added onto it)
 
 optional arguments:
+  
   -A ALLELERATIO, --AlleleRatio ALLELERATIO
                         The minmum ration of major to minor alleles 
                         (default = .2)
+  
   -R REFUNITS, --RefUnits REFUNITS
                         The minimum number of SSR units in a reference SSR
                         (default = 4)
+  
   -P POPUNITS, --PopUnits POPUNITS
                         The minimum number of SSR units in an accession SSR
                         (default = 3)
+  
   -F FLANKSIZE, --FlankSize FLANKSIZE
                         The number of flanking bases on each side of the SSR
                         that must match the reference (default = 10)
+  
   -S SUPPORT, --Support SUPPORT
                         Then minimum number of supporting reads for an allele
                         to be called (default = 2)
+  
   -W WINDOWOFFSET, --WindowOffset WINDOWOFFSET
                         Offset on each side of the reference sequence, making
                         a window for searching for the SSR (default = 1)
