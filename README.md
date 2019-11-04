@@ -27,7 +27,7 @@ A file with a tab separated table that includes the name of the reference sequen
 usage: python3 SSRFinder.py ReferenceFile SamFiles OutputFile
 
 positional arguments:
-  ReferenceFile         The refrence file (FASTA)
+\tReferenceFile         The refrence file (FASTA)
   SamFiles              Text document with the SAM file names seperated by
                         newline
   OutputFile            Output file name ( ".ssr" will be added onto it)
