@@ -1,7 +1,7 @@
 # SSRgenotyper
 find SSRs in a population
 
-SSRmulti will find simple sequence repeats of length 2,3, and 4 from given sam files and a reference. SSR with the same letters (i.e. GGG) or are lowercase will be excluded. The output is a table that with the marker names and SSR alleles. 
+SSRmulti will find simple sequence repeats of length 2,3, and 4 from given sam files and a reference. SSR with the same letters (i.e. GGG) or are lowercase will be excluded. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. 
 
 ## Making the Reference
 
@@ -28,7 +28,7 @@ usage: python3 SSRFinder.py ReferenceFile SamFiles OutputFile
 
 positional arguments:
 
-**ReferenceFile** - The refrence file (FASTA)
+**ReferenceFile** - The reference file (FASTA)
 
 **SamFiles** - Text document with the SAM file names seperated by
                         newline
@@ -38,7 +38,7 @@ positional arguments:
 optional arguments:
   
   -A ALLELERATIO, --AlleleRatio ALLELERATIO
-                        The minmum ration of major to minor alleles 
+                        The minimum ratio of major to minor alleles 
                         (default = .2)
   
   -R REFUNITS, --RefUnits REFUNITS
@@ -62,4 +62,4 @@ optional arguments:
                         a window for searching for the SSR (default = 1)
 
 ## Example
-python SSRFinder <referenceFile.fa> <mySamFiles.txt> <myOutput>
+python SSRFinder <referenceFile.fa> <mySamFiles.txt> <myOutput> -F 20 -S 1
