@@ -5,8 +5,27 @@ SSRmulti will find simple sequence repeats of length 2,3, and 4 from given sam f
 
 ## Making the Reference
 
-The reference is expected to be a .fasta file with a target SSR on each sequence. This can be created using MISA on a reference and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 75 bp upstream and downstream seems to work well. SSRmulti will find which SSR is on each sequence so this does not need to be provided.
+The reference is expected to be a .fasta file with a target SSR on each sequence surrounded by flanking nucleotides. This can be created using MISA on a reference and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 75 bp upstream and downstream seems to work well. SSRmulti will find which SSR is on each sequence so this does not need to be provided.
 
+For example:
+perl misa.pl myReference.fasta
+
+misa.ini looks like this:
+
+definition(unit_size,min_repeats):                   2-6 3-4 4-4
+
+interruptions(max_difference_between_2_SSRs):        100
+
+GFF:                                                     true
+---
+
+for i in \*.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) print $1 "\t" $4-100 "\t" $5+100}' > $i.mod.gff; echo "processing $i"; done
+
+for i in \*.mod.gff; do cat $i >> cat.gff; echo "processing $i"; done
+
+awk '($2 >= 0)' cat.gff > cat_f1.gff 
+
+bedtools getfasta -fi myReference.fasta -bed cat_f1.gff -fo myReferenceForSSRgenotyper.fasta
 
 ## Prepping the SAM Files
 The sam files should be filtered for quality, the headers removed and only the first 10 row should be kept. This can be done with samtools and cut:
