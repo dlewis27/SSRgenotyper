@@ -1,7 +1,7 @@
 # SSRgenotyper
 find SSRs in a population
 
-SSRmulti will find simple sequence repeats of length 2,3, and 4 from given sam files and a reference. SSR with the same letters (i.e. GGG) or are lowercase will be excluded. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. 
+SSRmulti will find simple sequence repeats of length 2 and 4 from given sam files and a reference. SSR with the same letters (i.e. GGG) or are lowercase will be excluded. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. 
 
 ## Making the Reference
 
@@ -32,8 +32,10 @@ awk '($2 >= 0)' cat.gff > cat_f1.gff
 bedtools getfasta -fi myReference.fasta -bed cat_f1.gff -fo myReferenceForSSRgenotyper.fasta
 
 ## Prepping the SAM Files
-The sam files should be filtered for quality, the headers removed and only the first 10 row should be kept. This can be done with samtools and cut:
-  samtools view -q 45 <samFile> | cut -f1-10 > <samFile>.f1
+while the whole SAM file can be passed in, this is strongly discouraged as it will slow down the run time. Filtering the file with samtools will speed it up. For example, run:
+
+samtools view -q 45 <samFile> > samFile.f1
+
 The sam files should be provided in as a list in a text document with each file name on a new line. This can be done with:
   ls *.f1 > samFiles.txt
 
@@ -47,7 +49,7 @@ A file with a tab separated table that includes the name of the reference sequen
 
 ## Options
 
-usage: python3 SSRFinder.py ReferenceFile SamFiles OutputFile
+usage: python3 SSRgenotyperV2.py ReferenceFile SamFiles OutputFile
 
 positional arguments:
 
@@ -85,4 +87,4 @@ optional arguments:
                         a window for searching for the SSR (default = 1)
 
 ## Example
-python SSRFinder <referenceFile.fa> <mySamFiles.txt> <myOutput> -F 20 -S 1
+python3 SSRgenotyperV2.py <referenceFile.fa> <mySamFiles.txt> <myOutput> -F 20 -S 1
