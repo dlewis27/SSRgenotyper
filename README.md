@@ -25,6 +25,8 @@ for i in \*.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) pr
 
 for i in \*.mod.gff; do cat $i >> cat.gff; echo "processing $i"; done
 
+#### remove lines where the range is less than 0
+
 awk '($2 >= 0)' cat.gff > cat_f1.gff 
 
 #### use bedtools to make the reference sequence
