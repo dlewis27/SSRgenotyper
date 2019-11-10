@@ -14,7 +14,7 @@ perl misa.pl myReference.fasta
 
 #### and misa.ini looks like this:
 
-definition(unit_size,min_repeats):                   2-6 3-4 4-4
+definition(unit_size,min_repeats):                   2-6 3-4
 
 interruptions(max_difference_between_2_SSRs):        100
 
