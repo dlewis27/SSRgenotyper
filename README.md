@@ -33,6 +33,11 @@ awk '($2 >= 0)' cat.gff > cat_f1.gff
 
 bedtools getfasta -fi myReference.fasta -bed cat_f1.gff -fo myReferenceForSSRgenotyper.fasta
 
+#### Mapping
+
+We used BWA mem to map FASTQ files to the newly made reference though any mapping software can be used. To map FASTQ files, run
+for i in \*.fq; do BWA mem $i myReferenceForSSRgenotyper.fasta; done 
+
 ## Prepping the SAM Files
 while the whole SAM file can be passed in, this is strongly discouraged as it will slow down the run time. Filtering the file with samtools will speed it up. For example, run:
 
