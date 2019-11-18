@@ -52,10 +52,13 @@ The script go through the reference file, finding the SSRs and the specified num
 
 ## Output
 
-A file with a tab separated table that includes the name of the reference sequence for the row names, and the first 7 characters (unless changed by option -N) in the names of the sam files for the column names. The elements of the table show the number of SSR units found. For example, "9,9" means that the SSR unit was found 9 times. This is likely a homogenous allele. If this were to show "9,8" then reads supporting an allele with 9 SSR units were found as well as reads supporting 8 SSR units. This is a hetrozygous allele. If the first number is "0" followed by a negative number, then no alleles were called and the negative number is the code for whay no alleles were called. The codes corrispond to the following reasons:
+A file with a tab separated table that includes the name of the reference sequence for the row names, and the first 7 characters (unless changed by option -N) in the names of the sam files for the column names. The elements of the table show the number of SSR units found. For example, "9,9" means that the SSR unit was found 9 times. This is likely a homogenous allele. If this were to show "9,8" then reads supporting an allele with 9 SSR units were found as well as reads supporting 8 SSR units. This is a hetrozygous allele. If the first number is "0" followed by a negative number, then no alleles were called and the negative number is the code for whay no alleles were called. For example "0,-2" shows no alleles were called becauses no reads in the SAM file mapped to this marker. The codes corrispond to the following reasons:
 
 -1: No SSR was found in the reference marker. 
 -2: No reads from the accession were mapped to this marker.
+-3: More than 2 alleles were found 
+-4: Not enough reads were found to support calling an allele
+
 
 
 ## Options
