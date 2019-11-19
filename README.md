@@ -67,11 +67,11 @@ A file with a tab separated table that includes the name of the reference sequen
 
 -4: Not enough reads were found to support calling an allele. The minimum number of supporting reads is determined by option -S.
 
-
+Two files are generated. The .ssr file has the tab-delemited table and the .ssrstat has a log file that shows the genotyping statistics
 
 ## Options
 
-usage: python3 SSRgenotyperV2.py ReferenceFile SamFiles OutputFile
+usage: python3 SSRgenotyperV2.py <ReferenceFile> <SamFiles> <OutputFile>
 
 positional arguments:
 
@@ -115,4 +115,4 @@ optional arguments:
 -Q --QualityFilter, filters the reads from the SAM file. Only reads above this threshold will be considered in SSRgenotyper (default = 45)
 
 ## Example
-python3 SSRgenotyperV2.py <referenceFile.fa> <mySamFiles.txt> <myOutput> -F 20 -S 1
+python3 SSRgenotyperV2.py myReferenceForSSRgenotyper.fasta samFiles.txt myOutput -F 20 -S 1
