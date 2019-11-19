@@ -35,15 +35,20 @@ bedtools getfasta -fi myReference.fasta -bed cat_f1.gff -fo myReferenceForSSRgen
 
 #### Mapping
 
-We used BWA mem to map FASTQ files to the newly made reference though any mapping software can be used. To map FASTQ files, run
-for i in \*.fq; do BWA mem $i myReferenceForSSRgenotyper.fasta; done 
+We used BWA mem to map FASTQ files to the newly made reference though any mapping software can be used. To map FASTQ files with BWA mem, first index the reference file with:
+
+bwa index myReferenceForSSRgenotyper.fasta
+
+then map the files with:
+
+for i in \*.fq; do BWA mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done 
 
 ## Prepping the SAM Files
 while the whole SAM file can be passed in, this is strongly discouraged as it will slow down the run time. Filtering the file with samtools will speed it up. For example, run:
 
 samtools view -q 45 <samFile> > samFile.f1
 
-The sam files should be provided in as a list in a text document with each file name on a new line. This can be done with:
+There is no need to convert the file to BAM format or to sort or index the file. The sam files should be provided in as a list in a text document with each file name on a new line. This can be done with:
   ls *.f1 > samFiles.txt
 
 ## How it Works
@@ -55,9 +60,12 @@ The script go through the reference file, finding the SSRs and the specified num
 A file with a tab separated table that includes the name of the reference sequence for the row names, and the first 7 characters (unless changed by option -N) in the names of the sam files for the column names. The elements of the table show the number of SSR units found. For example, "9,9" means that the SSR unit was found 9 times. This is likely a homogenous allele. If this were to show "9,8" then reads supporting an allele with 9 SSR units were found as well as reads supporting 8 SSR units. This is a hetrozygous allele. If the first number is "0" followed by a negative number, then no alleles were called and the negative number is the code for whay no alleles were called. For example "0,-2" shows no alleles were called becauses no reads in the SAM file mapped to this marker. The codes corrispond to the following reasons:
 
 -1: No SSR was found in the reference marker. 
+
 -2: No reads from the accession were mapped to this marker.
--3: More than 2 alleles were found 
--4: Not enough reads were found to support calling an allele
+
+-3: More than 2 alleles were found so the marker for this asseccion is ambiguous
+
+-4: Not enough reads were found to support calling an allele. The minimum number of supporting reads is determined by option -S.
 
 
 
@@ -76,16 +84,18 @@ positional arguments:
 
 optional arguments:
   
-  -A ALLELERATIO, --AlleleRatio ALLELERATIO
-                        The minimum ratio of major to minor alleles 
-                        (default = .2)
+  -A --AlleleRatio
+                        The minimum ratio of reads for 2 alleles to be considered heterozygous. If 2 alleles are found but the ratio of reads for each does not meet this threshold, it will be reported as a homozygous allele. (default = .2)
+
+-N --NameSize 
+  The number of characters, starting from the first character, from the name of the SAM file to be listed in the output table
   
   -R REFUNITS, --RefUnits REFUNITS
-                        The minimum number of SSR units in a reference SSR
+                        The minimum number of SSR units in a reference SSR. For example, if the parameter for this is 4, "ATGATGATG" will not be found but "ATGATGATGATG" will.
                         (default = 4)
   
   -P POPUNITS, --PopUnits POPUNITS
-                        The minimum number of SSR units in an accession SSR
+                        The minimum number of SSR units in an accession SSR. This is the same as the REFUNITS parameter, but for the population
                         (default = 3)
   
   -F FLANKSIZE, --FlankSize FLANKSIZE
@@ -93,12 +103,16 @@ optional arguments:
                         that must match the reference (default = 10)
   
   -S SUPPORT, --Support SUPPORT
-                        Then minimum number of supporting reads for an allele
-                        to be called (default = 2)
+                        Then minimum number of total supporting reads for an allele
+                        to be called. For example, if this parameter is 6 and there are 3 reads that show an allele with 5 SSR units and 2 reads that show an allele with 7 SSR units, then this allele will not be called and then reported as "0,-4" (default = 2)
   
   -W WINDOWOFFSET, --WindowOffset WINDOWOFFSET
                         Offset on each side of the reference sequence, making
-                        a window for searching for the SSR (default = 1)
+                        a window for searching for the SSR. It is recomended that this not be changed. (default = 1)
+                        
+-r --refFilter If the porportion of the population that had no call for a marker meets this threshold, then the marker will not be reported (i.e. if this is .3 and 40% of the population had no call at this marker, then the marker will be ommitted from the output table.) Should be between 0 and 1 (default = 0)
+
+-Q --QualityFilter, filters the reads from the SAM file. Only reads above this threshold will be considered in SSRgenotyper (default = 45)
 
 ## Example
 python3 SSRgenotyperV2.py <referenceFile.fa> <mySamFiles.txt> <myOutput> -F 20 -S 1
