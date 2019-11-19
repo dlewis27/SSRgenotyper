@@ -82,6 +82,8 @@ def prepSam(samFile):
     samData = {}
     with open(samFile, 'r') as f:
         for line in f:
+            if line.startsWith("@"):
+                continue
             splitLine = line.split('\t')
             if len(splitLine) > 9:
                 refName = splitLine[2]
@@ -266,6 +268,7 @@ def processSams(refData, outputDict, inSamFiles):
                 appendable = findSamReads(subSam, refData[refName])
             colToAppend.append(appendable)
         outputDict[samName] = colToAppend
+        print("processed SAM file:", samFile)
 
 
 def searchRef(refDict, outputDict):
