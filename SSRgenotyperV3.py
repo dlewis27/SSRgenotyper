@@ -82,18 +82,17 @@ def prepSam(samFile):
     samData = {}
     with open(samFile, 'r') as f:
         for line in f:
-            if line.startsWith("@"):
-                continue
-            splitLine = line.split('\t')
-            if len(splitLine) > 9:
-                refName = splitLine[2]
-                matchRead = splitLine[9]
-                quality = int(splitLine[4])
-                readID = splitLine[0]
-                if quality >= qualityFilter:
-                    if refName not in samData:
-                        samData[refName] = []
-                    samData[refName].append(matchRead)
+            if line.startswith("@") == False:
+                splitLine = line.split('\t')
+                if len(splitLine) > 9:
+                    refName = splitLine[2]
+                    matchRead = splitLine[9]
+                    quality = int(splitLine[4])
+                    readID = splitLine[0]
+                    if quality >= qualityFilter:
+                        if refName not in samData:
+                            samData[refName] = []
+                        samData[refName].append(matchRead)
     return samData
 
 def genRepeats(repeatSize):
