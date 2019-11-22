@@ -1,11 +1,11 @@
 # SSRgenotyper
 find SSRs in a population
 
-SSRmulti will find simple sequence repeats of length 2 and 4 from given sam files and a reference. SSR with the same letters (i.e. GGG) or are lowercase will be excluded. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. 
+SSRgenotyper will find simple sequence repeats of length 2, 3, and 4 from given sam files and a reference. SSR with the same letters (i.e. GGG) or are lowercase will be excluded. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. 
 
 ## Making the Reference
 
-The reference is expected to be a .fasta file with a target SSR on each sequence surrounded by flanking nucleotides. This can be created using MISA on a reference and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 75 bp upstream and downstream seems to work well. SSRmulti will find which SSR is on each sequence so this does not need to be provided.
+The reference is expected to be a .fasta file with a target SSR on each sequence surrounded by flanking nucleotides. This can be created using MISA on a reference and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 75 bp upstream and downstream seems to work well. SSRgenotyper will find which SSR is on each sequence so this does not need to be provided.
 
 For example:
 
@@ -113,6 +113,8 @@ optional arguments:
 -r --refFilter If the porportion of the population that had no call for a marker meets this threshold, then the marker will not be reported (i.e. if this is .3 and 40% of the population had no call at this marker, then the marker will be ommitted from the output table.) Should be between 0 and 1 (default = 0)
 
 -Q --QualityFilter, filters the reads from the SAM file. Only reads above this threshold will be considered in SSRgenotyper (default = 45)
+
+-X, --Xdebug Provide marker name and SAM file name seperated by ?%?. This will output the reads from the SAM file that mapped to the marker. If this option is not "" then the main program will not run. The output will be in debug.txt (default = "").
 
 ## Example
 python3 SSRgenotyperV2.py myReferenceForSSRgenotyper.fasta samFiles.txt myOutput -F 20 -S 1
