@@ -34,7 +34,7 @@ parser.add_argument("-S", "--Support", help = "Then minimum number of supporting
 parser.add_argument("-W", "--WindowOffset", help = "Offset on each side of the reference sequence, making a window for searching for the SSR (default = 1)", type=int, default = 1)
 parser.add_argument("-r", "--refFilter", help = "If the porportion of accesions that had no call meet this threshhold, then this marker will not be reported, between 0 and 1 (default = 0)", type=float, default = 0)
 parser.add_argument("-Q", "--QualityFilter", help = "Reads with quality score below this level will be filtered out (default = 45)", type=int, default=45)
-parser.add_argument("-X", "--Xdebug", help = "Provide marker name and SAM file name seperated by ?%?. This will also be the output file name (default = \"\")", type=str, default = "")
+parser.add_argument("-X", "--Xdebug", help = "Provide marker name and SAM file name seperated by ','. This will also be the output file name (default = '')", type=str, default = "")
 
 args = parser.parse_args()
 
