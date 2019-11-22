@@ -327,7 +327,7 @@ def filterTable(outputDf):
 def debug(debugName):
     output="ERROR"
     pattern = ""
-    split = debugName.split("?%?")
+    split = debugName.split(",")
     markerName = split[0]
     samFileName = split[1]
     outputDict = {}
