@@ -1,7 +1,7 @@
 # SSRgenotyper
 find SSRs in a population
 
-SSRgenotyper will find simple sequence repeats of length 2, 3, and 4 from given sam files and a reference. SSR with the same letters (i.e. GGG) or are lowercase will be excluded. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. 
+SSRgenotyper will find simple sequence repeats of length 2 and 3 from given sam files and a reference. SSR with the same letters (i.e. GGG) or are lowercase will be excluded. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. 
 
 ## Making the Reference
 
