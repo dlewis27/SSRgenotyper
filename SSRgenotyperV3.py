@@ -34,6 +34,7 @@ parser.add_argument("-S", "--Support", help = "Then minimum number of supporting
 parser.add_argument("-W", "--WindowOffset", help = "Offset on each side of the reference sequence, making a window for searching for the SSR (default = 1)", type=int, default = 1)
 parser.add_argument("-r", "--refFilter", help = "If the porportion of accesions that had no call meet this threshhold, then this marker will not be reported, between 0 and 1 (default = 0)", type=float, default = 0)
 parser.add_argument("-Q", "--QualityFilter", help = "Reads with quality score below this level will be filtered out (default = 45)", type=int, default=45)
+parser.add_argument("-X", "--Xdebug", help = "Provide marker name and SAM file name seperated by ?%?. This will also be the output file name (default = \"\")", type=str, default = "")
 
 args = parser.parse_args()
 
@@ -65,6 +66,7 @@ numFlankNucs = args.FlankSize
 nameSize = args.NameSize
 refFilter = args.refFilter
 qualityFilter = args.QualityFilter
+debugName = args.Xdebug
 
 noSSRinRef = 0 #-1
 noReadsMapped =0 #-2
@@ -321,8 +323,59 @@ def filterTable(outputDf):
             indexToRemove.append(index)
     newTable = outputDf.drop(outputDf.index[indexToRemove])
     return newTable
+ 
+def debug(debugName):
+    output="ERROR"
+    pattern = ""
+    split = debugName.split("?%?")
+    markerName = split[0]
+    samFileName = split[1]
+    outputDict = {}
+    refData = searchRef(refDict, outputDict)
+    if refData[markerName] != 0:
+        pattern = refData[markerName][0]
+    samFile = samFileName.rstrip("\n")
+    samData = prepSam(samFile)
+    if markerName not in refData:
+        output = "marker not in reference"
+    elif markerName not in samData:
+        output = "no reads mapped to this marker"
+    else:
+        output = "Marker: " + markerName + "\n" + "SAM file: " + samFileName + "\n" + "Pattern: " + pattern + "\n"
+        refSeq = str(refDict[markerName].seq)
+        flankRlocationRef = re.search(refData[markerName][3], refSeq)
+        flankLlocationRef = re.search(refData[markerName][2], refSeq)
+        refSeq2 = refSeq[:flankLlocationRef.start() + numFlankNucs] + "   " + refSeq[flankLlocationRef.start() + numFlankNucs:flankRlocationRef.start()] + "   " + refSeq[flankRlocationRef.start():]
+        output += "\nReference Sequence: " + refSeq2 + "\n\n" 
+        subSam = samData[markerName]
+        goodReads = []
+        badReads = []
+        for s in subSam:
+            flankRlocation = re.search(refData[markerName][3], s)
+            flankLlocation = re.search(refData[markerName][2], s)
+            if flankLlocation == None or flankRlocation == None:
+                badReads.append(s)
+            else:
+                print(flankRlocation.start(), flankLlocation.start())
+                print(flankLlocation)
+                offset = " " * (flankLlocationRef.start() - flankLlocation.start() + 20) 
+                newS = offset + s[:flankLlocation.start() + numFlankNucs] + "   " + s[flankLlocation.start() + numFlankNucs:flankRlocation.start()] + s[flankRlocation.start():]
+                goodReads.append(newS)
+        for g in goodReads:
+            output += g
+        output += "\n"
+        for b in badReads:
+            output += b
+    with open("debug.txt", "w" ) as w:
+        w.write(output)
+        
+        
     
+
 def main():
+    if debugName != "":
+        debug(debugName)
+        return
     
     startTime = time.time()      
     
