@@ -175,7 +175,7 @@ def printResults(resultArray):
     if (len(resultArray) < minNumReads) or (len(resultArray) <= 0):
         #also not enough SSR freq
         global notEnoughCov
-        notEnoughCov =+1
+        notEnoughCov += 1
         return "0,-4"
     uniqueValues2 = set(resultArray)
     uniqueValues = []
