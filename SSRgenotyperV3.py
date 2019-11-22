@@ -359,13 +359,15 @@ def debug(debugName):
                 print(flankRlocation.start(), flankLlocation.start())
                 print(flankLlocation)
                 offset = " " * (flankLlocationRef.start() - flankLlocation.start() + 20) 
-                newS = offset + s[:flankLlocation.start() + numFlankNucs] + "   " + s[flankLlocation.start() + numFlankNucs:flankRlocation.start()] + s[flankRlocation.start():]
+                newS = offset + s[:flankLlocation.start() + numFlankNucs] + "   " + s[flankLlocation.start() + numFlankNucs:flankRlocation.start()] + "  "+ s[flankRlocation.start():]
                 goodReads.append(newS)
         for g in goodReads:
-            output += g
+            g2 = g.rstrip("\n")
+            output += (g2 +"\n")
         output += "\n"
         for b in badReads:
-            output += b
+            b2 = b.rstrip("\n")
+            output += (b2 + "\n")
     with open("debug.txt", "w" ) as w:
         w.write(output)
         
