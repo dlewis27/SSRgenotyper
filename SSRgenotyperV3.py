@@ -185,7 +185,7 @@ def printResults(resultArray):
             uniqueValues[int(i)] = 1 
         else:
             uniqueValues[int(i)] += 1
-    alleleData = sorted(uniqueValues.items(), key=lambda x: x[1], reverse = True)
+    alleleData = sorted(uniqueValues.items(), key=lambda x: x[0], reverse = True)
     if len(alleleData) == 0:
         return "ERROR"
     
@@ -198,6 +198,8 @@ def printResults(resultArray):
         allele1Support = alleleData[0][1]
         allele2Support = alleleData[1][1]
         ratio = allele1Support/allele2Support
+        if ratio > 1:
+            ratio = 1/ratio
         if ratio >= majorMinorRatio:
             global hetero
             hetero +=1
@@ -407,6 +409,7 @@ def makeJoinMap(outputDf):
     
     #transform newTableAsList to newTable
     newDf = pd.DataFrame(newTableAsList)
+    newDf.to_csv(outFile + ".ssr", sep= "\t")
     # headers and stuff to newDf and some other formating
 
 def main():
