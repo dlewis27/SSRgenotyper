@@ -26,7 +26,7 @@ parser.add_argument("ReferenceFile", help = "The refrence file (FASTA)")
 parser.add_argument("SamFiles", help = "Text document with the SAM file names seperated by newline")
 parser.add_argument("OutputFile", help = "Output file name ( end with \".ssr\")")
 parser.add_argument("-A","--AlleleRatio", help = "The minmum ration of major to minor alleles, between 0 and 1 (default = .2)", type=float, default = .2)
-parser.add_argument("-N", "--NameSize", help = "The number of characters to be printed from each SAM file name in the output table (default = 7)", type= int, default = 7)
+parser.add_argument("-N", "--NameSize", help = "The number of characters to be printed from each SAM file name in the output table (default = 100)", type= int, default = 100)
 parser.add_argument("-R", "--RefUnits", help = "The minimum number of SSR units in a reference SSR (default = 4)", type=int, default = 4)
 parser.add_argument("-P", "--PopUnits", help = "The minimum number of SSR units in an accession SSR (default = 3)", type=int, default = 3)
 parser.add_argument("-F", "--FlankSize", help = "The number of flanking bases on each side of the SSR that must match the reference (default = 15)", type=int, default= 15)
@@ -35,6 +35,7 @@ parser.add_argument("-W", "--WindowOffset", help = "Offset on each side of the r
 parser.add_argument("-r", "--refFilter", help = "If the porportion of accesions that had no call meet this threshhold, then this marker will not be reported, between 0 and 1 (default = 0)", type=float, default = 0)
 parser.add_argument("-Q", "--QualityFilter", help = "Reads with quality score below this level will be filtered out (default = 45)", type=int, default=45)
 parser.add_argument("-X", "--Xdebug", help = "Provide marker name and SAM file name seperated by ','. This will also be the output file name (default = '')", type=str, default = "")
+parser.add_argument("-J", "--JoinMap", help = "Output a table ready for JoinMap. Make sure the first 2 SAM file names are the parents (default = False)", type=bool, default = False)
 
 args = parser.parse_args()
 
@@ -67,6 +68,7 @@ nameSize = args.NameSize
 refFilter = args.refFilter
 qualityFilter = args.QualityFilter
 debugName = args.Xdebug
+doJoinMap = args.JoinMap
 
 noSSRinRef = 0 #-1
 noReadsMapped =0 #-2
@@ -177,34 +179,35 @@ def printResults(resultArray):
         global notEnoughCov
         notEnoughCov += 1
         return "0,-4"
-    uniqueValues2 = set(resultArray)
-    uniqueValues = []
-    for u in uniqueValues2:
-        uniqueValues.append(int(u))
-    if len(uniqueValues) == 0:
+    uniqueValues = {}
+    for i in resultArray:
+        if int(i) not in uniqueValues:
+            uniqueValues[int(i)] = 1 
+        else:
+            uniqueValues[int(i)] += 1
+    alleleData = sorted(uniqueValues.items(), key=lambda x: x[1], reverse = True)
+    if len(alleleData) == 0:
         return "ERROR"
-        
-    elif len(uniqueValues) == 1:
+    
+    elif len(alleleData) == 1:
         global homo
         homo +=1
-        return (str(uniqueValues[0]) +","+str(uniqueValues[0]))
+        return (str(alleleData[0][0]) +","+ str(alleleData[0][0]))
 
     elif len(uniqueValues) == 2:
-        allele1Support = resultArray.count(uniqueValues[0])
-        allele2Support = resultArray.count(uniqueValues[1])
+        allele1Support = alleleData[0][1]
+        allele2Support = alleleData[1][1]
         ratio = allele1Support/allele2Support
-        if ratio > 1:
-            ratio = 1/ratio
         if ratio >= majorMinorRatio:
             global hetero
             hetero +=1
-            return(str(uniqueValues[0]) + "," + str(uniqueValues[1]))
+            return(str(alleleData[0][0]) + "," + str(alleleData[1][0]))
         else:
             global alleleFreqNotMet
             #reported as homo in table and in stats
             alleleFreqNotMet +=1
             homo +=1
-            return(str(uniqueValues[0]) + "," + str(uniqueValues[0]))
+            return(str(alleleData[0][0]) + "," + str(alleleData[0][0]))
 
     elif len(uniqueValues) > 2:
         global ambiguous
@@ -356,8 +359,6 @@ def debug(debugName):
             if flankLlocation == None or flankRlocation == None:
                 badReads.append(s)
             else:
-                print(flankRlocation.start(), flankLlocation.start())
-                print(flankLlocation)
                 offset = " " * (flankLlocationRef.start() - flankLlocation.start() + 20) 
                 newS = offset + s[:flankLlocation.start() + numFlankNucs] + "   " + s[flankLlocation.start() + numFlankNucs:flankRlocation.start()] + "  "+ s[flankRlocation.start():]
                 goodReads.append(newS)
@@ -371,8 +372,9 @@ def debug(debugName):
     with open("debug.txt", "w" ) as w:
         w.write(output)
         
-        
-    
+def makeJoinMap(outputDf):
+    print("under construction")
+    #make dict for each parent
 
 def main():
     if debugName != "":
@@ -391,6 +393,9 @@ def main():
     if refFilter != 0:
         outputDf = filterTable(outputDf)
     outputDf.to_csv(outFile + ".ssr", sep= "\t")
+    
+    if doJoinMap == True:
+        makeJoinMap(outputDf)
     
     endTime = time.time()
     runtime = endTime-startTime
