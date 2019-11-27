@@ -234,21 +234,16 @@ def writeStats(runtime, refProcessTime):
     statOut.close()
 
 def findSamReads(subSam, refInput):
-    if refInput == 0:
-        return "0,-2"
-        global noReadsMapped
-        noReadsMapped +=1
-    else:
-        refPattern = refInput[0]
-        #refName = refInput[1]
-        flankL =refInput[2]
-        flankR = refInput[3]
-        samRepeatCounts = []
-        for r in subSam:
-            appendable = findSpecificRepeat(r, refPattern, flankL, flankR)
-            if appendable != None:
-                samRepeatCounts.append(appendable)
-        returnable = printResults(samRepeatCounts)
+    refPattern = refInput[0]
+    #refName = refInput[1]
+    flankL =refInput[2]
+    flankR = refInput[3]
+    samRepeatCounts = []
+    for r in subSam:
+        appendable = findSpecificRepeat(r, refPattern, flankL, flankR)
+        if appendable != None:
+            samRepeatCounts.append(appendable)
+    returnable = printResults(samRepeatCounts)
     return returnable
 
 
@@ -262,10 +257,14 @@ def processSams(refData, outputDict, inSamFiles):
         samName = samFile[0:nameSize]
         colToAppend = []
         for refName in  refData.keys():
-            if refName not in samData:
-                appendable = "0,-1"
+            if refData[refName] == 0:
+                appendable= "0,-1"
                 global noSSRinRef
                 noSSRinRef +=1
+            elif refName not in samData:
+                appendable = "0,-2"
+                global noReadsMapped
+                noReadsMapped +=1
             else:
                 subSam = samData[refName]
                 #refData[refName] is a list
@@ -374,7 +373,41 @@ def debug(debugName):
         
 def makeJoinMap(outputDf):
     print("under construction")
-    #make dict for each parent
+    #iterate through row
+    newTableAsList = []
+    for index, row in outputDf.iterrows():
+        newRow = []
+        parent1 = row[3]
+        parent2 = row[4]
+        p1 = 'A'
+        p2 = 'B'
+        if ',' in parent1:
+            p1 = 'N'
+        if ',' in parent2:
+            p2 = 'N'
+        newRow.append(p1)
+        newRow.append(p2)
+        for r in row[5:]:
+            if r == parent1:
+                newRow.append(p1)
+            elif r == parent2:
+                newRow.append(p2)
+            elif ',' in r:
+                # if partent hetero then won't match anyways
+                rSplit = r.split(',')
+                allele1 = rSplit[0]
+                allele2 = rSplit[1]
+                if allele1 == parent1 and allele2 == parent2:
+                    newRow.append('H')
+                elif allele1 == parent2 and allele2 == parent1:
+                    newRow.append('H')
+            else:
+                newRow.append('N')
+        newTableAsList.append(newRow)
+    
+    #transform newTableAsList to newTable
+    newDf = pd.DataFrame(newTableAsList)
+    # headers and stuff to newDf and some other formating
 
 def main():
     if debugName != "":
