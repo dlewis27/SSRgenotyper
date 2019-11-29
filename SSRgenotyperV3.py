@@ -22,10 +22,10 @@ from Bio import SeqIO
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("ReferenceFile", help = "The refrence file (FASTA)")
+parser.add_argument("ReferenceFile", help = "The reference file (FASTA)")
 parser.add_argument("SamFiles", help = "Text document with the SAM file names seperated by newline")
-parser.add_argument("OutputFile", help = "Output file name ( end with \".ssr\")")
-parser.add_argument("-A","--AlleleRatio", help = "The minmum ration of major to minor alleles, between 0 and 1 (default = .2)", type=float, default = .2)
+parser.add_argument("OutputFile", help = "Output file name ( will end with \".ssr\")")
+parser.add_argument("-A","--AlleleRatio", help = "The minmum ratio of major to minor alleles, between 0 and 1 (default = .2)", type=float, default = .2)
 parser.add_argument("-N", "--NameSize", help = "The number of characters to be printed from each SAM file name in the output table (default = 100)", type= int, default = 100)
 parser.add_argument("-R", "--RefUnits", help = "The minimum number of SSR units in a reference SSR (default = 4)", type=int, default = 4)
 parser.add_argument("-P", "--PopUnits", help = "The minimum number of SSR units in an accession SSR (default = 3)", type=int, default = 3)
@@ -81,7 +81,7 @@ ambiguous = 0 #-3
 
 refDict = SeqIO.to_dict(SeqIO.parse(fastaRef, "fasta"))
 
-def prepSam(samFile):
+def prepSam(samFile, includeNames = False):
     #samFile is string
     samData = {}
     with open(samFile, 'r') as f:
@@ -96,7 +96,10 @@ def prepSam(samFile):
                     if quality >= qualityFilter:
                         if refName not in samData:
                             samData[refName] = []
-                        samData[refName].append(matchRead)
+                        if includeNames:
+                            samData[refName].append([matchRead, readID])
+                        else:
+                            samData[refName].append(matchRead)
     return samData
 
 def genRepeats(repeatSize):
@@ -337,7 +340,7 @@ def debug(debugName):
     if refData[markerName] != 0:
         pattern = refData[markerName][0]
     samFile = samFileName.rstrip("\n")
-    samData = prepSam(samFile)
+    samData = prepSam(samFile, True)
     if markerName not in refData:
         output = "marker not in reference"
     elif markerName not in samData:
@@ -352,15 +355,17 @@ def debug(debugName):
         subSam = samData[markerName]
         goodReads = []
         badReads = []
-        for s in subSam:
+        for sub in subSam:
+            s = sub[0]
+            subName = sub[1]
             flankRlocation = re.search(refData[markerName][3], s)
             flankLlocation = re.search(refData[markerName][2], s)
             if flankLlocation == None or flankRlocation == None:
-                badReads.append(s)
+                badReads.append(s + "  ---" + subName + "---")
             else:
                 offset = " " * (flankLlocationRef.start() - flankLlocation.start() + 20) 
                 newS = offset + s[:flankLlocation.start() + numFlankNucs] + "   " + s[flankLlocation.start() + numFlankNucs:flankRlocation.start()] + "  "+ s[flankRlocation.start():]
-                goodReads.append(newS)
+                goodReads.append(newS + "  ---" + subName + "---")
         for g in goodReads:
             g2 = g.rstrip("\n")
             output += (g2 +"\n")
@@ -415,10 +420,13 @@ def makeMap(outputDf):
                     newRow.append('H')
             else:
                 newRow.append('U')
-        newTableAsList.append(newRow)
-    
+        newTableAsList.append(newRow)        
     #transform newTableAsList to newTable
     newDf = pd.DataFrame(newTableAsList)
+        #get headers from old table
+    headers = outputDf.columns.values.tolist()
+    newDf.columns = headers[3:]
+    
     newDf.to_csv(outFile + ".map", sep= "\t")
     # headers and stuff to newDf and some other formating
 
