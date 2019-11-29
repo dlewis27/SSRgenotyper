@@ -35,7 +35,7 @@ parser.add_argument("-W", "--WindowOffset", help = "Offset on each side of the r
 parser.add_argument("-r", "--refFilter", help = "If the porportion of accesions that had no call meet this threshhold, then this marker will not be reported, between 0 and 1 (default = 0)", type=float, default = 0)
 parser.add_argument("-Q", "--QualityFilter", help = "Reads with quality score below this level will be filtered out (default = 45)", type=int, default=45)
 parser.add_argument("-X", "--Xdebug", help = "Provide marker name and SAM file name seperated by ','. This will also be the output file name (default = '')", type=str, default = "")
-parser.add_argument("-J", "--JoinMap", help = "Output a table ready for JoinMap. Make sure the first 2 SAM file names are the parents (default = False)", type=bool, default = False)
+parser.add_argument("-M", "--Map", help = "Output a table showing relation to two parents. Make sure the first 2 SAM file names are the parents (default = False)", type=bool, default = False)
 
 args = parser.parse_args()
 
@@ -68,7 +68,7 @@ nameSize = args.NameSize
 refFilter = args.refFilter
 qualityFilter = args.QualityFilter
 debugName = args.Xdebug
-doJoinMap = args.JoinMap
+doMap = args.Map
 
 noSSRinRef = 0 #-1
 noReadsMapped =0 #-2
@@ -185,7 +185,7 @@ def printResults(resultArray):
             uniqueValues[int(i)] = 1 
         else:
             uniqueValues[int(i)] += 1
-    alleleData = sorted(uniqueValues.items(), key=lambda x: x[0], reverse = True)
+    alleleData = sorted(uniqueValues.items(), key=lambda x: x[1], reverse = True)
     if len(alleleData) == 0:
         return "ERROR"
     
@@ -197,9 +197,7 @@ def printResults(resultArray):
     elif len(uniqueValues) == 2:
         allele1Support = alleleData[0][1]
         allele2Support = alleleData[1][1]
-        ratio = allele1Support/allele2Support
-        if ratio > 1:
-            ratio = 1/ratio
+        ratio = allele2Support/allele1Support
         if ratio >= majorMinorRatio:
             global hetero
             hetero +=1
@@ -225,7 +223,7 @@ def writeStats(runtime, refProcessTime):
     statOut.write("Minimum number reads needed for SSR to be considered: " + str(minNumReads) + "\n")
     statOut.write("Minimum SSR unit frequency for population: " + str(minSSRfreq) + "\n")
     statOut.write("Minimum reference SSR unit frequency: " + str(minRefFreq) + "\n")
-    statOut.write("No SSR found in reference: " + str(noSSRinRef) + "\n")
+    statOut.write("No SSR found in reference (counted for each SAM file): " + str(noSSRinRef) + "\n")
     statOut.write("No reads mapped to marker: " + str(noReadsMapped) + "\n")
     statOut.write("Not enough coverage to call: " + str(notEnoughCov) + "\n")
     statOut.write("Minimum allele ratio not met, reported as homozygote in table and in stats: " + str(alleleFreqNotMet) + "\n")
@@ -373,10 +371,14 @@ def debug(debugName):
     with open("debug.txt", "w" ) as w:
         w.write(output)
         
-def makeJoinMap(outputDf):
-    print("under construction")
+def makeMap(outputDf):
+    #make inferences if a parent is missing in separate program? 
     #iterate through row
+    if outputDf.shape[1] < 5:
+        print("ERROR: provide atleast 2 SAM files (2 parents)")
+        return
     newTableAsList = []
+    print("making map")
     for index, row in outputDf.iterrows():
         newRow = []
         parent1 = row[3]
@@ -384,9 +386,17 @@ def makeJoinMap(outputDf):
         p1 = 'A'
         p2 = 'B'
         if ',' in parent1:
-            p1 = 'N'
+            continue
         if ',' in parent2:
-            p2 = 'N'
+            continue
+        #skip non informative markers, just where parent1 and parent2 are diff and not hetero
+        if parent1 == parent2:
+            continue
+        if 0 in parent1:
+            p1 = 'U'
+        if 0 in parent2:
+            p2 = 'U'
+        newRow.append(row[0])
         newRow.append(p1)
         newRow.append(p2)
         for r in row[5:]:
@@ -404,12 +414,12 @@ def makeJoinMap(outputDf):
                 elif allele1 == parent2 and allele2 == parent1:
                     newRow.append('H')
             else:
-                newRow.append('N')
+                newRow.append('U')
         newTableAsList.append(newRow)
     
     #transform newTableAsList to newTable
     newDf = pd.DataFrame(newTableAsList)
-    newDf.to_csv(outFile + ".ssr", sep= "\t")
+    newDf.to_csv(outFile + ".map", sep= "\t")
     # headers and stuff to newDf and some other formating
 
 def main():
@@ -430,8 +440,8 @@ def main():
         outputDf = filterTable(outputDf)
     outputDf.to_csv(outFile + ".ssr", sep= "\t")
     
-    if doJoinMap == True:
-        makeJoinMap(outputDf)
+    if doMap == True:
+        makeMap(outputDf)
     
     endTime = time.time()
     runtime = endTime-startTime
