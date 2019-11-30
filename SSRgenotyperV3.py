@@ -32,7 +32,7 @@ parser.add_argument("-P", "--PopUnits", help = "The minimum number of SSR units 
 parser.add_argument("-F", "--FlankSize", help = "The number of flanking bases on each side of the SSR that must match the reference (default = 15)", type=int, default= 15)
 parser.add_argument("-S", "--Support", help = "Then minimum number of supporting reads for alleles to be called (default = 3)", type = int, default = 3)
 parser.add_argument("-W", "--WindowOffset", help = "Offset on each side of the reference sequence, making a window for searching for the SSR (default = 1)", type=int, default = 1)
-parser.add_argument("-r", "--refFilter", help = "If the porportion of accesions that had no call meet this threshhold, then this marker will not be reported, between 0 and 1 (default = 0)", type=float, default = 0)
+parser.add_argument("-r", "--refFilter", help = "If the porportion of accesions that had no call meet this threshhold, then this marker will not be reported, between 0 and 1 (default = 1)", type=float, default = 1)
 parser.add_argument("-Q", "--QualityFilter", help = "Reads with quality score below this level will be filtered out (default = 45)", type=int, default=45)
 parser.add_argument("-X", "--Xdebug", help = "Provide marker name and SAM file name seperated by ','. This will also be the output file name (default = '')", type=str, default = "")
 parser.add_argument("-M", "--Map", help = "Output a table showing relation to two parents. Make sure the first 2 SAM file names are the parents (default = False)", type=bool, default = False)
@@ -444,7 +444,7 @@ def main():
     #process Sams
     processSams(refData, outputDict, samFiles)
     outputDf = pd.DataFrame(outputDict)
-    if refFilter != 0:
+    if refFilter != 1:
         outputDf = filterTable(outputDf)
     outputDf.to_csv(outFile + ".ssr", sep= "\t")
     
