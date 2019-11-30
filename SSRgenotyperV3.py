@@ -401,9 +401,9 @@ def makeMap(outputDf):
         #skip non informative markers, just where parent1 and parent2 are diff and not hetero
         if parent1 == parent2:
             continue
-        if 0 in parent1:
+        if '0' in parent1:
             p1 = 'U'
-        if 0 in parent2:
+        if '0' in parent2:
             p2 = 'U'
         newRow.append(row[0])
         newRow.append(p1)
