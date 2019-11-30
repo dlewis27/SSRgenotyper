@@ -390,9 +390,13 @@ def makeMap(outputDf):
         parent2 = row[4]
         p1 = 'A'
         p2 = 'B'
-        if ',' in parent1:
+        #change how to check for hetero
+        #separate and see if same
+        p1Split = parent1.split(',')
+        if p1Split[0] != p1Split[1]:
             continue
-        if ',' in parent2:
+        p2Split = parent2.split(',')
+        if p2Split[0] != p2Split[1]:
             continue
         #skip non informative markers, just where parent1 and parent2 are diff and not hetero
         if parent1 == parent2:
@@ -405,9 +409,9 @@ def makeMap(outputDf):
         newRow.append(p1)
         newRow.append(p2)
         for r in row[5:]:
-            if r == parent1:
+            if r == p1Split[0]:
                 newRow.append(p1)
-            elif r == parent2:
+            elif r == p2Split[0]:
                 newRow.append(p2)
             elif ',' in r:
                 # if partent hetero then won't match anyways
