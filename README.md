@@ -87,7 +87,8 @@ optional arguments:
 **-W --WindowOffset** Offset on each side of the reference sequence, making a window for searching for the SSR. It is recomended that this not be changed. (default = 1)\
 **-r --refFilter** If the porportion of the population that had no call for a marker meets this threshold, then the marker will not be reported (i.e. if this is .8 and 90% of the population had no call at this marker, then the marker will be ommitted from the output table.) Should be between 0 and 1 (default = 1)\
 **-Q --QualityFilter** filters the reads from the SAM file. Only reads above this threshold will be considered in SSRgenotyper (default = 45)\
-**-X, --Xdebug** Provide marker name and SAM file name seperated by "'". This will output the reads from the SAM file that mapped to the marker. If this option is not "" then the main program will not run. The output will be in debug.txt (default = "").
+**-X --Xdebug** Provide marker name and SAM file name seperated by "'". This will output the reads from the SAM file that mapped to the marker. If this option is not "" then the main program will not run. The output will be in debug.txt (default = "").
+**-M --Map** Output a map for a biparental population. The first 2 SAM files in the SAM file list should be the two parents. Non-informative (parent 1 and parent 2 have the same allele) markers and markers where there is no call for one or both the parents will be excluded. If one or both of the parents are heterozygous, the marker will also be excluded.
 
 ## Example
 python3 SSRgenotyper.py myReferenceForSSRgenotyper.fasta samFiles.txt myOutput -F 20 -S 1
