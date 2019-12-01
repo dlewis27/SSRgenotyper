@@ -59,7 +59,7 @@ SSRgenotyper will go through the reference file, finding the SSRs and the specif
 
 A file with a tab separated table that includes the name of the reference sequence as the names of the rows, and the names of the sam files for the column names. The elements of the table show the number of SSR units found. For example, "9,9" means that the SSR unit was found 9 times. This is likely a homogenous allele. If this were to show "9,8" then reads supporting an allele with 9 SSR units were found as well as reads supporting 8 SSR units. This is a hetrozygous allele. If the first number is "0" followed by a negative number, then no alleles were called. The negative number is the code for whay no alleles were called. For example "0,-2" shows no alleles were called becauses no reads in the SAM file mapped to this marker. The following codes are:
 
--1: No SSR was found in the reference marker.\
+-1: No SSR was found in the reference sequence.\
 -2: No reads from the accession were mapped to this marker.\
 -3: More than 2 alleles were found so the marker for this asseccion is ambiguous\
 -4: Not enough reads were found to support calling an allele. The minimum number of supporting reads is determined by option -S.\
@@ -68,50 +68,26 @@ Two files are generated. The .ssr file has the tab-delemited table and the .ssrs
 
 ## Options
 
-usage: python3 SSRgenotyperV2.py <ReferenceFile> <SamFiles> <OutputFile>
+usage: python3 SSRgenotyper.py <ReferenceFile> <SamFiles> <OutputFile>
 
 positional arguments:
 
-**ReferenceFile** - The reference file (FASTA)
-
-**SamFiles** - Text document with the SAM file names seperated by
-                        newline
-                        
+**ReferenceFile** - The reference file (FASTA)\
+**SamFiles** - Text document with the SAM file names seperated by newlines\                       
 **OutputFile** - Output file name ( ".ssr" will be added onto it)
 
 optional arguments:
   
-  -A --AlleleRatio
-                        The minimum ratio of reads for 2 alleles to be considered heterozygous. If 2 alleles are found but the ratio of reads for each does not meet this threshold, it will be reported as a homozygous allele. (default = .2)
-
--N --NameSize 
-  The number of characters, starting from the first character, from the name of the SAM file to be listed in the output table
-  
-  -R REFUNITS, --RefUnits REFUNITS
-                        The minimum number of SSR units in a reference SSR. For example, if the parameter for this is 4, "ATGATGATG" will not be found but "ATGATGATGATG" will.
-                        (default = 4)
-  
-  -P POPUNITS, --PopUnits POPUNITS
-                        The minimum number of SSR units in an accession SSR. This is the same as the REFUNITS parameter, but for the population
-                        (default = 3)
-  
-  -F FLANKSIZE, --FlankSize FLANKSIZE
-                        The number of flanking bases on each side of the SSR
-                        that must match the reference (default = 10)
-  
-  -S SUPPORT, --Support SUPPORT
-                        Then minimum number of total supporting reads for an allele
-                        to be called. For example, if this parameter is 6 and there are 3 reads that show an allele with 5 SSR units and 2 reads that show an allele with 7 SSR units, then this allele will not be called and then reported as "0,-4" (default = 2)
-  
-  -W WINDOWOFFSET, --WindowOffset WINDOWOFFSET
-                        Offset on each side of the reference sequence, making
-                        a window for searching for the SSR. It is recomended that this not be changed. (default = 1)
-                        
--r --refFilter If the porportion of the population that had no call for a marker meets this threshold, then the marker will not be reported (i.e. if this is .3 and 40% of the population had no call at this marker, then the marker will be ommitted from the output table.) Should be between 0 and 1 (default = 0)
-
--Q --QualityFilter, filters the reads from the SAM file. Only reads above this threshold will be considered in SSRgenotyper (default = 45)
-
--X, --Xdebug Provide marker name and SAM file name seperated by ?%?. This will output the reads from the SAM file that mapped to the marker. If this option is not "" then the main program will not run. The output will be in debug.txt (default = "").
+**-A --AlleleRatio** The minimum ratio of reads for 2 alleles to be considered heterozygous. If 2 alleles are found but the ratio of reads for each does not meet this threshold, it will be reported as a homozygous allele. (default = .2)\
+**-N --NameSize** The number of characters, starting from the first character, from the name of the SAM file to be listed in the output table. Make sure that this is still unique. If this causes SAM files to have have the same name, the results will be inaccurate. (default = 100)\
+**-R --RefUnits** The minimum number of SSR units in a reference SSR. For example, if the parameter for this is 4, "ATGATGATG" will not be found but "ATGATGATGATG" will.(default = 4)\
+**-P --PopUnits** The minimum number of SSR units in an accession SSR. This is the same as the REFUNITS parameter, but for the SAM files (default = 3)\
+**-F --FlankSize** The number of flanking bases on each side of the SSR that must match the reference. If there is a high amount of ambiguous non-calls, then increasing this may help (default = 20).\
+**-S --Support** Then minimum number of total supporting reads for an allele to be called. For example, if this parameter is 6 and there are 3 reads that show an allele with 5 SSR units and 2 reads that show an allele with 7 SSR units,n o allele will not be called and then reported as "0,-4". (default = 2)\
+**-W --WindowOffset** Offset on each side of the reference sequence, making a window for searching for the SSR. It is recomended that this not be changed. (default = 1)\
+**-r --refFilter** If the porportion of the population that had no call for a marker meets this threshold, then the marker will not be reported (i.e. if this is .8 and 90% of the population had no call at this marker, then the marker will be ommitted from the output table.) Should be between 0 and 1 (default = 1)\
+**-Q --QualityFilter** filters the reads from the SAM file. Only reads above this threshold will be considered in SSRgenotyper (default = 45)\
+**-X, --Xdebug** Provide marker name and SAM file name seperated by "'". This will output the reads from the SAM file that mapped to the marker. If this option is not "" then the main program will not run. The output will be in debug.txt (default = "").
 
 ## Example
-python3 SSRgenotyperV2.py myReferenceForSSRgenotyper.fasta samFiles.txt myOutput -F 20 -S 1
+python3 SSRgenotyper.py myReferenceForSSRgenotyper.fasta samFiles.txt myOutput -F 20 -S 1
