@@ -226,13 +226,13 @@ def writeStats(runtime, refProcessTime):
     statOut.write("Minimum number reads needed for SSR to be considered: " + str(minNumReads) + "\n")
     statOut.write("Minimum SSR unit frequency for population: " + str(minSSRfreq) + "\n")
     statOut.write("Minimum reference SSR unit frequency: " + str(minRefFreq) + "\n")
-    statOut.write("No SSR found in reference (counted for each SAM file): " + str(noSSRinRef) + "\n")
-    statOut.write("No reads mapped to marker: " + str(noReadsMapped) + "\n")
-    statOut.write("Not enough coverage to call: " + str(notEnoughCov) + "\n")
+    statOut.write("(-1) No SSR found in reference (counted for each SAM file): " + str(noSSRinRef) + "\n")
+    statOut.write("(-2) No reads mapped to marker: " + str(noReadsMapped) + "\n")
+    statOut.write("(-4) Not enough coverage to call: " + str(notEnoughCov) + "\n")
     statOut.write("Minimum allele ratio not met, reported as homozygote in table and in stats: " + str(alleleFreqNotMet) + "\n")
     statOut.write("Homozygous: " + str(homo) + "\n")
     statOut.write("Heterozygous: " + str(hetero) + "\n")
-    statOut.write("Ambigous (more than 2 alleles found): " + str(ambiguous) + "\n")
+    statOut.write("(-3) Ambigous (more than 2 alleles found): " + str(ambiguous) + "\n")
     statOut.write("RunTime: " + str(runtime) + " minutes" + "\n")
     statOut.close()
 
@@ -412,13 +412,13 @@ def makeMap(outputDf):
                 elif r[0] == p2 and r[1] == p1:
                     newRow.append('H')
                 else:
-                    newRow.append('U')
+                    newRow.append(element)
             elif r[0] == p1:
                 newRow.append('A')
             elif r[0] == p2:
                 newRow.append('B')
             else:
-                newRow.append('U')
+                newRow.append(element)
 
         newTableAsList.append(newRow)        
     #transform newTableAsList to newTable
