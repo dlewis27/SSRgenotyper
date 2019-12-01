@@ -8,15 +8,13 @@ The reference is expected to be a FASTA file with a target SSR on each sequence 
 
 To make the refererence with MISA and Bedtools:
 
-#### running misa
+#### running misa:
 perl misa.pl myReference.fasta
 
 #### and misa.ini looks like this:
 
-definition(unit_size,min_repeats):                   2-6 3-4
-
-interruptions(max_difference_between_2_SSRs):        100
-
+definition(unit_size,min_repeats):                   2-6 3-4\
+interruptions(max_difference_between_2_SSRs):        100\
 GFF:                                                     true
 
 #### modify the resulting gff files and concatenated them
