@@ -6,9 +6,9 @@ SSRgenotyper will find simple sequence repeats (SSRs) of length 2 and 3 from giv
 
 The reference is expected to be a FASTA file with a target SSR on each sequence surrounded by flanking nucleotides. This can be created using MISA on a reference genome to find the location of the SSRs, and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 75 bp upstream and downstream seems to work well. SSRgenotyper will find which SSR is on each sequence so this does not need to be provided.
 
-For example:
+To make the refererence with MISA and Bedtools:
 
-#### run misa
+#### running misa
 perl misa.pl myReference.fasta
 
 #### and misa.ini looks like this:
@@ -47,16 +47,17 @@ while the whole SAM file can be passed in, this is strongly discouraged as it wi
 
 samtools view -q 45 <samFile> > samFile.f1
 
-There is no need to convert the file to BAM format or to sort or index the file. The sam files should be provided in as a list in a text document with each file name on a new line. This can be done with:
-  ls *.f1 > samFiles.txt
+This will remove reads with mapping quality less than 45. SSRgenotyper has an option, -Q, to further filter the reads. There is no need to convert the SAM files to BAM format or to sort or index. The sam files should be provided as a list in a text document with each file name on a new line. This can be done with:
+
+ls *.f1 > samFiles.txt
 
 ## How it Works
 
-The script go through the reference file, finding the SSRs and the specified number of flanking nucleotides on both sides of the SSR. It then goes through each sam file, looks at the reads that mapped to the reference sequence, and looks for reads with the SSR pattern and matching flanking nucleotides.
+SSRgenotyper will go through the reference file, finding the SSRs and the specified number of flanking nucleotides on both sides of the SSR. It then goes through each sam file, finding reads that mapped to the reference sequence, and looks the SSR pattern and matching flanking nucleotides. A call is then made based on the number of SSR units.
 
 ## Output
 
-A file with a tab separated table that includes the name of the reference sequence for the row names, and the first 7 characters (unless changed by option -N) in the names of the sam files for the column names. The elements of the table show the number of SSR units found. For example, "9,9" means that the SSR unit was found 9 times. This is likely a homogenous allele. If this were to show "9,8" then reads supporting an allele with 9 SSR units were found as well as reads supporting 8 SSR units. This is a hetrozygous allele. If the first number is "0" followed by a negative number, then no alleles were called and the negative number is the code for whay no alleles were called. For example "0,-2" shows no alleles were called becauses no reads in the SAM file mapped to this marker. The codes corrispond to the following reasons:
+A file with a tab separated table that includes the name of the reference sequence as the names of the rows, and the names of the sam files for the column names. The elements of the table show the number of SSR units found. For example, "9,9" means that the SSR unit was found 9 times. This is likely a homogenous allele. If this were to show "9,8" then reads supporting an allele with 9 SSR units were found as well as reads supporting 8 SSR units. This is a hetrozygous allele. If the first number is "0" followed by a negative number, then no alleles were called. The negative number is the code for whay no alleles were called. For example "0,-2" shows no alleles were called becauses no reads in the SAM file mapped to this marker. The following codes are:
 
 -1: No SSR was found in the reference marker.\
 -2: No reads from the accession were mapped to this marker.\
