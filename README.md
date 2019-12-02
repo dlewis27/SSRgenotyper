@@ -60,7 +60,7 @@ A file with a tab separated table that includes the name of the reference sequen
 -1: No SSR was found in the reference sequence.\
 -2: No reads from the accession were mapped to this marker.\
 -3: More than 2 alleles were found so the marker in this SAM file. It is considered is ambiguous\
--4: Not enough reads were found to support calling an allele. The minimum number of supporting reads is determined by option -S.\
+-4: Not enough reads were found to support calling an allele. The minimum number of supporting reads is determined by option -S
 
 Two files are generated. The .ssr file has the tab-delimited table and the .ssrstat shows the genotyping statistics
 
