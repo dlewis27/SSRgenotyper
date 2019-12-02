@@ -81,11 +81,11 @@ optional arguments:
 **-R --RefUnits** The minimum number of SSR units in a reference SSR. For example, if the parameter for this is 4, "ATGATGATG" will not be found but "ATGATGATGATG" will.(default = 4)\
 **-P --PopUnits** The minimum number of SSR units in an accession SSR. This is the same as the REFUNITS parameter, but for the SAM files (default = 3)\
 **-F --FlankSize** The number of flanking bases on each side of the SSR that must match the reference. If there is a high amount of ambiguous non-calls, then increasing this may help (default = 20).\
-**-S --Support** Then minimum number of total supporting reads for an allele to be called. For example, if this parameter is 6 and there are 3 reads that show an allele with 5 SSR units and 2 reads that show an allele with 7 SSR units,n o allele will not be called and then reported as "0,-4". (default = 3)\
+**-S --Support** Then minimum number of total supporting reads for alleles to be called. For example, if this parameter is 6 and there are 3 reads that show an allele with 5 SSR units and 2 reads that show an allele with 7 SSR units, no allele will not be called and then reported as "0,-4". (default = 3)\
 **-W --WindowOffset** Offset on each side of the reference sequence, making a window for searching for the SSR. It is recommended that this not be changed. (default = 1)\
 **-r --refFilter** If the porportion of the population that had no call for a marker meets this threshold, then the marker will not be reported (i.e. if this is .8 and 90% of the population had no call at this marker, then the marker will be omitted from the output table.) Should be between 0 and 1 (default = 1)\
 **-Q --QualityFilter** filters the reads from the SAM file. Only reads above this threshold will be considered in SSRgenotyper. If there are a lot of ambiguous non-calls, increasing this can help. (default = 45)\
-**-X --Xdebug** Provide marker name and SAM file name separated by "'". This will output the reads from the SAM file that mapped to the marker. If this option is not "" then the main program will not run. The output will be in debug.txt (default = "")\
+**-X --Xdebug** Provide marker name and SAM file name separated by ",". This will output the reads from the SAM file that mapped to the marker. If this option is not "" then the main program will not run. The output will be in debug.txt (default = "")\
 **-M --Map** Output a map for a biparental population. The first 2 SAM files in the SAM file list should be the two parents. Non-informative (parent 1 and parent 2 have the same allele) markers and markers where there is no call for one or both the parents will be excluded. If one or both of the parents are heterozygous, the marker will also be excluded.
 
 ## Example
