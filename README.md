@@ -38,7 +38,7 @@ bwa index myReferenceForSSRgenotyper.fasta
 
 then map the files with:
 
-for i in \*.fq; do BWA mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done 
+for i in \*.fq; do bwa mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done 
 
 ## Prepping the SAM Files
 while the whole SAM file can be passed in, this is strongly discouraged as it will slow down the run time. Filtering the file with samtools will speed it up. For example, run:
