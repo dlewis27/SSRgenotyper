@@ -4,7 +4,7 @@ SSRgenotyper will find simple sequence repeats (SSRs) of length 2 and 3 from giv
 
 ## Making the Reference
 
-The reference is expected to be a FASTA file with a target SSR on each sequence surrounded by flanking nucleotides. This can be created using MISA on a reference genome to find the location of the SSRs, and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 75 bp upstream and downstream seems to work well. SSRgenotyper will find which SSR is on each sequence so this does not need to be provided.
+The reference is expected to be a FASTA file with a target SSR on each sequence surrounded by flanking nucleotides. This can be created using MISA [can be downladed here](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip) on a reference genome to find the location of the SSRs, and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 75 bp upstream and downstream seems to work well. SSRgenotyper will find which SSR is on each sequence so this does not need to be provided.
 
 To make the reference with MISA and Bedtools:
 
