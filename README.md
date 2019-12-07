@@ -43,7 +43,7 @@ for i in \*.fq; do bwa mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done
 ## Prepping the SAM Files
 while the whole SAM file can be passed in, this is strongly discouraged as it will slow down the run time. Filtering the file with samtools will speed it up. For example, run:
 
-samtools view -q 45 <samFile> > samFile.f1
+for i in *.sam; do samtools view $i -q 45 > $i.f1; done
 
 This will remove reads with mapping quality less than 45. SSRgenotyper has an option, -Q, to further filter the reads. There is no need to convert the SAM files to BAM format or to sort or index. The sam files should be provided as a list in a text document with each file name on a new line. This can be done with:
 
