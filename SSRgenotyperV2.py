@@ -13,6 +13,7 @@ Created on Wed Dec 11 14:02:07 2019
 
 
 import re
+import regex
 import itertools
 import pandas as pd
 #from collections import Counter
@@ -37,7 +38,7 @@ parser.add_argument("-Q", "--QualityFilter", help = "Reads with quality score be
 parser.add_argument("-X", "--Xdebug", help = "Provide marker name and SAM file name seperated by ','. This will also be the output file name (default = '')", type=str, default = "")
 parser.add_argument("-M", "--Map", help = "Output a table showing relation to two parents. Make sure the first 2 SAM file names are the parents (default = False)", type=bool, default = False)
 parser.add_argument("-a", "--ambiguousSalvage", help = "If the reads supporting the 3rd most supported allele divided by the total reads supporting the first 2 alleles is equal to or greater than this, the call will be ambiguous.", type=float, default = .1)
-
+parser.add_argument("-m", "--mismatch", help = "The number of mismatch allowance for each flanking region. Insertions, deletions, and substitutions considered (default = 0)", type = int, default = 0)
 
 args = parser.parse_args()
 
@@ -60,7 +61,6 @@ with open(samsDoc) as sd:
         samFiles.append(i)
 
 majorMinorRatio = args.AlleleRatio
-
 flankOffset = args.WindowOffset
 minRefFreq = args.RefUnits
 minSSRfreq = args.PopUnits 
@@ -72,6 +72,7 @@ qualityFilter = args.QualityFilter
 debugName = args.Xdebug
 doMap = args.Map
 ambiguousSlavageThreshold = args.ambiguousSalvage
+mismatch = args.mismatch
 
 noSSRinRef = 0 #-1
 noReadsMapped =0 #-2
@@ -159,8 +160,11 @@ def getMaxLen(array):
     return myMax
             
 def findSpecificRepeat(read, repeat, flankL, flankR):
+    
     reg = "".join([flankL,"((", repeat, ")+)", flankR])
-    found = re.findall(reg, str(read))
+    if mismatch > 0:
+        reg = "".join([flankL,"{e<=",mismatch,"}((", repeat, ")+)", flankR, "{e<=",mismatch,"}"])
+    found = regex.findall(reg, str(read))
     theMaxLen = getMaxLen(found)
     ##filter repeat here
     if theMaxLen/len(repeat) < minSSRfreq:
@@ -178,6 +182,21 @@ def getRefSeqPattern(nameOfRead, lengthOfRepeat):
 def veiwRefRead(refName):
     print(refDict[refName].seq)
 
+def process2alleles(alleleData):
+    allele1Support = alleleData[0][1]
+    allele2Support = alleleData[1][1]
+    ratio = allele2Support/allele1Support
+    if ratio >= majorMinorRatio:
+        global hetero
+        hetero +=1
+        return(str(alleleData[0][0]) + "," + str(alleleData[1][0]))
+    else:
+        global alleleFreqNotMet
+        #reported as homo in table and in stats
+        alleleFreqNotMet +=1
+        global homo
+        homo +=1
+        return(str(alleleData[0][0]) + "," + str(alleleData[0][0]))
     
 def printResults(resultArray):
     # resultArray is like 7,7,7,7,6,6,6,6
@@ -203,29 +222,22 @@ def printResults(resultArray):
         homo +=1
         return (str(alleleData[0][0]) +","+ str(alleleData[0][0]))
     
-    if len(uniqueValues) > 2:
+    elif len(alleleData) ==2:
+        return(process2alleles(alleleData))
+    
+    elif len(alleleData) > 2:
         # allele data is sorted, [x][0] element SSR unit, [x][1] is reads supporting it
         # grab 3rd allele (alleleData[3]) and see how large it is compared to first 2
         sumFirst2 = alleleData[0][1] + alleleData[1][1]
-        third = alleleData[3][1]
+        third = alleleData[2][1]
         if (third/sumFirst2) >= ambiguousSlavageThreshold:
             global ambiguous
             ambiguous +=1
             return "0,-3"
-    else:
-        allele1Support = alleleData[0][1]
-        allele2Support = alleleData[1][1]
-        ratio = allele2Support/allele1Support
-        if ratio >= majorMinorRatio:
-            global hetero
-            hetero +=1
-            return(str(alleleData[0][0]) + "," + str(alleleData[1][0]))
         else:
-            global alleleFreqNotMet
-            #reported as homo in table and in stats
-            alleleFreqNotMet +=1
-            homo +=1
-            return(str(alleleData[0][0]) + "," + str(alleleData[0][0]))
+            #procced as if 2 alleles
+            return(process2alleles(alleleData))
+
 
     return "ERRROR"
     
