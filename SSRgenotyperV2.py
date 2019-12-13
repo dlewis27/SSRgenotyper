@@ -308,12 +308,16 @@ def searchRef(refDict, outputDict):
         refSeq = str(refSeq)
         refPattern2, refNumRepeats2, flankL2, flankR2 = getRefSeqPattern(refName, 2)
         refPattern3, refNumRepeats3, flankL3, flankR3 = getRefSeqPattern(refName, 3)
+        refPattern4, refNumRepeats4, flankL4, flankR4 = getRefSeqPattern(refName, 4)
+
         
         if (refNumRepeats2 == None):
             refNumRepeats2 = 0
         if (refNumRepeats3 == None):
             refNumRepeats3 = 0
-        maxFreqArray = [refNumRepeats2, refNumRepeats3]   
+        if (refNumRepeats4 == None):
+            refNumRepeats4 = 0
+        maxFreqArray = [refNumRepeats2, refNumRepeats3, refNumRepeats4]   
         maxFreq = max(maxFreqArray)
         
         if (maxFreq < minRefFreq):
@@ -322,6 +326,8 @@ def searchRef(refDict, outputDict):
             refData[refName] = [refPattern2, refNumRepeats2, flankL2, flankR2]
         elif(refNumRepeats3 == maxFreq):
             refData[refName] = [refPattern3, refNumRepeats3, flankL3, flankR3]
+        elif(refNumRepeats4 == maxFreq):
+            refData[refName] = [refPattern4, refNumRepeats4, flankL4, flankR4]
         else:
             refData[refName] = 0
         
