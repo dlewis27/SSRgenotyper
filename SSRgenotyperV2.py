@@ -163,7 +163,8 @@ def findSpecificRepeat(read, repeat, flankL, flankR):
     
     reg = "".join([flankL,"((", repeat, ")+)", flankR])
     if mismatch > 0:
-        reg = "".join([flankL,"{e<=",mismatch,"}((", repeat, ")+)", flankR, "{e<=",mismatch,"}"])
+        mismatchStr = str(mismatch)
+        reg = "".join([flankL,"{e<=",mismatchStr,"}((", repeat, ")+)", flankR, "{e<=",mismatchStr,"}"])
     found = regex.findall(reg, str(read))
     theMaxLen = getMaxLen(found)
     ##filter repeat here
