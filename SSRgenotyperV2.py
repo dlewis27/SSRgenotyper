@@ -37,7 +37,7 @@ parser.add_argument("-r", "--refFilter", help = "If the porportion of accesions 
 parser.add_argument("-Q", "--QualityFilter", help = "Reads with quality score below this level will be filtered out (default = 45)", type=int, default=45)
 parser.add_argument("-X", "--Xdebug", help = "Provide marker name and SAM file name seperated by ','. This will also be the output file name (default = '')", type=str, default = "")
 parser.add_argument("-M", "--Map", help = "Output a table showing relation to two parents. Make sure the first 2 SAM file names are the parents (default = False)", type=bool, default = False)
-parser.add_argument("-a", "--ambiguousSalvage", help = "If the reads supporting the 3rd most supported allele divided by the total reads supporting the first 2 alleles is equal to or greater than this, the call will be ambiguous.", type=float, default = .1)
+parser.add_argument("-a", "--ambiguousSalvage", help = "If the reads supporting the 3rd most supported allele divided by the total reads supporting the first 2 alleles is equal to or greater than this, the call will be ambiguous (default = .1)", type=float, default = .1)
 parser.add_argument("-m", "--mismatch", help = "The number of mismatch allowance for each flanking region. Insertions, deletions, and substitutions considered (default = 0)", type = int, default = 0)
 
 args = parser.parse_args()
