@@ -87,6 +87,7 @@ optional arguments:
 **-Q --QualityFilter** filters the reads from the SAM file. Only reads above this threshold will be considered in SSRgenotyper. If there are a lot of ambiguous non-calls, increasing this can help. (default = 45)\
 **-X --Xdebug** Provide marker name and SAM file name separated by ",". This will output the reads from the SAM file that mapped to the marker. If this option is not "" then the main program will not run. The output will be in debug.txt (default = "")\
 **-M --Map** Output a map for a biparental population. The first 2 SAM files in the SAM file list should be the two parents. Non-informative (parent 1 and parent 2 have the same allele) markers and markers where there is no call for one or both the parents will be excluded. If one or both of the parents are heterozygous, the marker will also be excluded.
-
+**-a ambiguoussalvage** If the reads supporting the 3rd most supported allele divided by the total reads supporting the first 2 alleles is equal to or greater than this, the call will be ambiguous.
+**-m mismatch** The number of mismatch allowance for each flanking region. Insertions, deletions, and substitutions considered (default = 0)
 ## Example
 python3 SSRgenotyper.py myReferenceForSSRgenotyper.fasta samFiles.txt myOutput -F 20 -S 1
