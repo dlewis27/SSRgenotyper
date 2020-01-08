@@ -1,10 +1,10 @@
 # SSRgenotyper
 
-SSRgenotyper will find simple sequence repeats (SSRs) of length 2 and 3 from given SAM files and a reference. Homogenous SSRs with only one letter (i.e. GGGGGGG) will be excluded. Lowercase characters are not recognized and will be skipped. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. An optional output is available that shows alleles based on two parents.
+SSRgenotyper will find simple sequence repeats (SSRs) of lengths 2, 3 and 4 from given SAM files and a modified reference. Homogenous SSRs with only one letter (i.e. GGGGGGG) will be excluded. Lowercase characters are not recognized and will be skipped. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. An optional output is available that shows alleles based on two parents.
 
 ## Making the Reference
 
-The reference is expected to be a FASTA file with a target SSR on each sequence surrounded by flanking nucleotides. This can be created using [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip) on a reference genome to find the location of the SSRs, and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 75 bp upstream and downstream seems to work well. SSRgenotyper will find which SSR is on each sequence so this does not need to be provided.
+The reference is expected to be a FASTA file with a target SSR on each sequence surrounded by flanking nucleotides. This can be created using [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip) on a reference genome to find the location of the SSRs, and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 100 bp upstream and downstream seems to work well. SSRgenotyper will find which SSR is on each sequence so this does not need to be provided.
 
 To make the reference with MISA and Bedtools:
 
