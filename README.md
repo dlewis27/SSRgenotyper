@@ -90,4 +90,4 @@ optional arguments:
 **-a ambiguoussalvage** If the reads supporting the 3rd most supported allele divided by the total reads supporting the first 2 alleles is equal to or greater than this, the call will be ambiguous (default = .1).\
 **-m mismatch** The number of mismatch allowance for each flanking region. Insertions, deletions, and substitutions considered (default = 0)\
 ## Example
-python3 SSRgenotyper.py myReferenceForSSRgenotyper.fasta samFiles.txt myOutput -F 20 -S 1
+python3 SSRgenotyperV2.py myReferenceForSSRgenotyper.fasta samFiles.txt myOutput -F 20 -S 1
