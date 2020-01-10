@@ -1,6 +1,6 @@
 # SSRgenotyper
 
-SSRgenotyper will find simple sequence repeats (SSRs) of lengths 2, 3 and 4 from given SAM files and a modified reference. Homogenous SSRs with only one letter (i.e. GGGGGGG) will be excluded. Lowercase characters are not recognized and will be skipped. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. An optional output is available that shows alleles based on two parents.
+SSRgenotyper will find simple sequence repeats (SSRs) of lengths 2, 3 and 4 from given SAM files and a modified reference. Homogenous SSRs with only one letter (i.e. GGGGGGG) will be excluded. Lowercase characters are not recognized and will be skipped. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. An optional output is available that shows alleles based on two parents. Any questions can be sent to ssrgenotyperhelp@gmail.com.
 
 ## Making the Reference
 
