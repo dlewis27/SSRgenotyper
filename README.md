@@ -1,6 +1,6 @@
 # SSRgenotyper
 
-SSRgenotyper will find simple sequence repeats (SSRs) of lengths 2, 3 and 4 from given SAM files and a modified reference. Homogenous SSRs with only one letter (i.e. GGGGGGG) will be excluded. Lowercase characters are not recognized and will be skipped. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. An optional output is available that shows alleles based on two parents. Any questions can be sent to ssrgenotyperhelp@gmail.com.
+SSRgenotyper will find simple sequence repeats (SSRs) of lengths 2, 3 and 4 from given SAM files and a modified reference. Homogenous SSRs with only one letter (i.e. GGGGGGG) will be excluded. Lowercase characters are not recognized and will be skipped. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. A file in Genepop format is also created. An optional output is available that shows alleles based on two parents. Any questions can be sent to ssrgenotyperhelp@gmail.com.
 
 ## Making the Reference
 
@@ -62,7 +62,7 @@ A file with a tab separated table that includes the name of the reference sequen
 -3: More than 2 alleles were found so the marker in this SAM file. It is considered is ambiguous\
 -4: Not enough reads with the target SSR were found to support calling an allele. The minimum number of supporting reads is determined by option -S
 
-Two files are generated. The .ssr file has the tab-delimited table and the .ssrstat shows the genotyping statistics
+Three files are generated. The .ssr file has the tab-delimited table and the .ssrstat shows the genotyping statistics. The genepop file ends in .pop
 
 ## Options
 
