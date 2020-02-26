@@ -475,13 +475,13 @@ def createGenePop(outputDf):
     #third line is pop
     #data
     title = "SSR markers for "+outFile # first line
-    locusList = outputDf.iloc[:,0].tolist()
-    secondLine = '\t' +'\t'.join(locusList)
-    thirdLine = 'POP'
+    locusList = outputDf.iloc[:,0].tolist()       
     
     with open(outFile + '.pop', 'w') as popWriter:
-        popWriter.write(title + '\n' + secondLine + '\n' + thirdLine + '\n')
-        
+        popWriter.write(title + '\n')
+        for locus in locusList:
+            popWriter.write(locus + '\n')
+        popWriter.write('POP')
         for columnName in outputDf.columns[3:]:
             popWriter.write(columnName + ',')
             col = outputDf[columnName].tolist()
