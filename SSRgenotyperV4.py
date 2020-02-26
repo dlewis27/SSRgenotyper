@@ -481,7 +481,7 @@ def createGenePop(outputDf):
         popWriter.write(title + '\n')
         for locus in locusList:
             popWriter.write(locus + '\n')
-        popWriter.write('POP')
+        popWriter.write('POP' + '\n')
         for columnName in outputDf.columns[3:]:
             popWriter.write(columnName + ',')
             col = outputDf[columnName].tolist()
