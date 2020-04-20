@@ -54,7 +54,9 @@ ls *.Q45 > samFiles.txt
 
 ## How it Works
 
-SSRgenotyper will go through the reference file, finding the SSRs and the specified number of flanking nucleotides on both sides of the SSR. It then goes through each SAM file, finding reads that mapped to the reference sequence, and looks the SSR pattern and matching flanking nucleotides. A call is then made based on the number of SSR units.
+SSRgenotyper identifies reads mapping to each of the SSR in the modified reference file for each of the SAM files and makes a genotypic call based on the number of SSR units.  Processing of the SAM files is very fast with minimal memory utilization.
+
+usage: python3 SSRgenotyper.py <my_modified_reference.fasta> <SamFiles.txt> <OutputFile>
 
 ## Output
 
