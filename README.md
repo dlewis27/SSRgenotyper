@@ -6,7 +6,7 @@ SSRgenotyper will find simple sequence repeats (SSRs) of lengths 2, 3 and 4 from
 
 SSRgenotyper requires a modified reference which lists each targeted SSR with ~100 bp of flanking sequence. The modified reference can be easily created using a combination of easy to use bioinformatic tools, specifically [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip) and Bedtools. MISA is run against the reference genome of the species of interest to identify the location of the targeted SSRs. The reference genome can be a gold standard reference genome or a simple draft reference. Bedtools is then used to extract the targeted SSRs and their flanking sequences. Flanking sequence of ~100 bp upstream and downstream are needed for mapping/genotyping purposes. We refer to the MISA/Bedtools output as the modified reference (below it is referred to as "my_modified_Reference.fasta").
 
-To make the modified reference with MISA and Bedtools:
+## To make the modified reference with MISA and Bedtools:
 
 ### MISA:
 perl misa.pl my_Reference.fasta
