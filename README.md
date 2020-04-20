@@ -68,9 +68,9 @@ positional arguments:
 **SamFiles.txt** - Text document with the SAM file names separated by newlines\
 **OutputFileName** - Output file name (".ssr" extension will be added)
 
-optional arguments:
+Optional arguments:
   
-**-A --AlleleRatio** The minimum ratio of reads for 2 alleles to be considered heterozygous. If 2 alleles are found but the ratio of reads for each does not meet this threshold, it will be reported as a homozygous allele. (default = .2)\
+**-H --MinorAlleleHet** The minimum percentage of the minor allele for a genotype to be considered heterozygous. For diploid organisms, only two alleles should be present, thus we use this parameter to set the cut off for calling a heterozygous call. If 2 alleles are found but the percentage of minor allele reads is below this cutoff the genotype will be called as homozygous for the major allele. (default = .2)\
 **-N --NameSize** The number of characters, starting from the first character, from the name of the SAM file to be listed in the output table. Make sure that this is still unique. If this causes SAM files to have have the same name, the results will be inaccurate. (default = 100)\
 **-R --RefUnits** The minimum number of SSR units in a reference SSR. For example, if the parameter for this is 4, "ATGATGATG" will not be found but "ATGATGATGATG" will.(default = 4)\
 **-P --PopUnits** The minimum number of SSR units in an accession SSR. This is the same as the REFUNITS parameter, but for the SAM files (default = 3)\
