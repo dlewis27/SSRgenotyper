@@ -8,16 +8,16 @@ SSRgenotyper requires a modified reference which lists each targeted SSR with ~1
 
 To make the modified reference with MISA and Bedtools:
 
-#### MISA:
+## MISA:
 perl misa.pl my_Reference.fasta
 
-#### MISA requires a misa.ini file that should looks like this:
+### MISA requires a misa.ini file that should looks like this:
 
 definition(unit_size,min_repeats):                   2-6 3-4\
 interruptions(max_difference_between_2_SSRs):        100\
 GFF:                                                     true
 
-#### modify the resulting gff files:
+### modify the resulting gff files:
 for i in \*.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) print $1 "\t" $4-100 "\t" $5+100}' > $i.mod.gff; echo "processing $i"; done
 
 *this process removes any compound SSRs and calculates how much flanking sequence is available.
