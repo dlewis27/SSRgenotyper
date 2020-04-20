@@ -43,12 +43,12 @@ bwa index my_modified_Reference.fasta my_modified_Reference.fasta
 
 for i in \*.fq; do bwa mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done 
 
-### Prepare the SAM files for SSRGenotyper
-while the whole SAM file can be passed to SSRGenotyper, we encourage users to first filter the sam file with samtools to improve performance:
+### Quality control SAM files for SSRGenotyper
+While the whole SAM file can be passed to SSRGenotyper we encourage users to first filter the sam file with samtools to improve performance:
 
 for i in *.sam; do samtools view $i -q 45 > $i.Q45; done
 
-This will remove reads with mapping quality less than 45. SSRgenotyper provides further filtering arguments (-Q) that can be used for additional filter stringency. The SAM files do not need to be sorted or indexed. A file listing all SAM file to be processed is required by SSRGenotyper and can be produced with:
+This will remove reads with mapping quality less than 45. SSRgenotyper provides further filtering (option -Q) that can be used for additional filter stringency. The SAM files do not need to be sorted or indexed. Lastly a file listing all SAM files to be processed is required by SSRGenotyper and can be produced with:
 
 ls *.Q45 > samFiles.txt
 
