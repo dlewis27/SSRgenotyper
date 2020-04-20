@@ -64,8 +64,8 @@ usage: python3 SSRgenotyper.py <my_modified_reference.fasta> <SamFiles.txt> <Out
 
 positional arguments:
 
-**SSR_ReferenceFile** - This is the my_modified_reference.fasta referred to previously (FASTA) \
-**SamFiles.txt** - Text document with the SAM file names separated by newlines \          
+**SSR_ReferenceFile** - This is the my_modified_reference.fasta referred to previously (FASTA)\
+**SamFiles.txt** - Text document with the SAM file names separated by newlines\
 **OutputFileName** - Output file name (".ssr" extension will be added)
 
 optional arguments:
