@@ -37,20 +37,20 @@ Map trimmed and quality controlled Illumina reads (FASTQ) to the modified refere
 
 ### Index the modified reference file:
 
-bwa index my_modified_Reference.fasta
+bwa index my_modified_Reference.fasta my_modified_Reference.fasta
 
-### Map the Illumina reads to the modified reference.fasta:
+### Map the Illumina reads to the modified reference.fasta (single end reads process shown - can be done for paired-end reads):
 
 for i in \*.fq; do bwa mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done 
 
-## Prepare the SAM files for SSRGenotyper
-while the whole SAM file can be passed in, this is strongly discouraged as it will slow down the run time. Filtering the file with samtools will speed it up. For example, run:
+### Prepare the SAM files for SSRGenotyper
+while the whole SAM file can be passed to SSRGenotyper, we encourage users to first filter the sam file with samtools to improve performance:
 
-for i in *.sam; do samtools view $i -q 45 > $i.filter1; done
+for i in *.sam; do samtools view $i -q 45 > $i.Q45; done
 
-This will remove reads with mapping quality less than 45. SSRgenotyper has an option, -Q, to further filter the reads. There is no need to convert the SAM files to BAM format or to sort or index. The sam files should be provided as a list in a text document with each file name on a new line. This can be done with:
+This will remove reads with mapping quality less than 45. SSRgenotyper provides further filtering arguments (-Q) that can be used for additional filter stringency. The SAM files do not need to be sorted or indexed. A file listing all SAM file to be processed is required by SSRGenotyper and can be produced with:
 
-ls *.filter1 > samFiles.txt
+ls *.Q45 > samFiles.txt
 
 ## How it Works
 
