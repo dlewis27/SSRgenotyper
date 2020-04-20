@@ -1,38 +1,43 @@
 # SSRgenotyper
 
-SSRgenotyper will find simple sequence repeats (SSRs) of lengths 2, 3 and 4 from given SAM files and a modified reference. Homogenous SSRs with only one letter (i.e. GGGGGGG) will be excluded. Lowercase characters are not recognized and will be skipped. Currently it only works for diploid organisms. The output is a table that with the marker names and SSR alleles. A file in Genepop format is also created. An optional output is available that shows alleles based on two parents. Any questions can be sent to ssrgenotyperhelp@gmail.com.
+SSRgenotyper will find simple sequence repeats (SSRs) of lengths 2, 3 and 4 from SAM files and a modified reference fasta. Mono-nucleotide SSRs are excluded. Soft masked sequences are excluded during the analysis process. SSRgenotyper has only been tested on diploid organisms - use with caution on polyploids. Several output are possible including a simple table with the SSR marker name, position and SSR alleles (defined by the repeat number of the repeat motif). Specific output files for genetic diversity analysis include a Genepop formated file and a traditional A, H, B mapping files output can be selected - phased to the parents of the population for bi-parental linkage mapping populations. Questions regarding useage can be sent to ssrgenotyperhelp@gmail.com.
 
 ## Making the Reference
 
-The reference is expected to be a FASTA file with a target SSR on each sequence surrounded by flanking nucleotides. This can be created using [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip) on a reference genome to find the location of the SSRs, and then using Bedtools to extend the sequence on both sides for mapping purposes. Extending it by 100 bp upstream and downstream seems to work well. SSRgenotyper will find which SSR is on each sequence so this does not need to be provided.
+SSRgenotyper requires a modified reference which lists each targeted SSR with ~100 bp of flanking sequence. The modified reference can be easily created using a combination of easy to use bioinformatic tools, specifically [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip) and Bedtools. MISA is run against the reference genome of the species of interest to identify the location of the targeted SSRs. The reference genome can be a gold standard reference genome or a simple draft reference. Bedtools is then used to extract the targeted SSRs and their flanking sequences. Flanking sequence of ~100 bp upstream and downstream are needed for mapping/genotyping purposes. We refer to the MISA/Bedtools output as the modified reference (below it is referred to as "my_modified_Reference.fasta").
 
-To make the reference with MISA and Bedtools:
+To make the modified reference with MISA and Bedtools:
 
 #### running misa:
-perl misa.pl myReference.fasta
+perl misa.pl my_Reference.fasta
 
-#### and misa.ini looks like this:
+#### MISA requires a misa.ini file that should looks like this:
 
 definition(unit_size,min_repeats):                   2-6 3-4\
 interruptions(max_difference_between_2_SSRs):        100\
 GFF:                                                     true
 
-#### modify the resulting gff files and concatenated them
+#### modify the resulting gff files
 for i in \*.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) print $1 "\t" $4-100 "\t" $5+100}' > $i.mod.gff; echo "processing $i"; done
 
+*this process removes any compound SSRs and calculates how much flanking sequence is available.
+
+### concatenated the modified gff files
 for i in \*.mod.gff; do cat $i >> cat.gff; echo "processing $i"; done
 
-#### remove lines where the range is less than 0
+#### remove SSRs that do not have sufficient flanking seqeunce
 
 awk '($2 >= 0)' cat.gff > cat_filter1.gff 
 
-#### use bedtools to make the reference sequence
+#### use bedtools getfasta to make the modified reference
 
-bedtools getfasta -fi myReference.fasta -bed cat_filter1.gff -fo myReferenceForSSRgenotyper.fasta
+bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo my_modified_Reference.fasta
 
 #### Mapping
 
-We used BWA mem to map FASTQ files to the newly made reference though any mapping software can be used. To map FASTQ files with BWA mem, first index the reference file with:
+Map trimmed and quality controlled fastq files to the modified reference.  We provide an example using BWA mem, however any mapping software should work (minimap2, bowtie, etc.). The illumina reads should be  To map FASTQ files with 
+
+### Index the my_Reference file with:
 
 bwa index myReferenceForSSRgenotyper.fasta
 
