@@ -8,7 +8,7 @@ SSRgenotyper requires a modified reference which lists each targeted SSR with ~1
 
 To make the modified reference with MISA and Bedtools:
 
-#### running misa:
+#### MISA:
 perl misa.pl my_Reference.fasta
 
 #### MISA requires a misa.ini file that should looks like this:
@@ -17,31 +17,33 @@ definition(unit_size,min_repeats):                   2-6 3-4\
 interruptions(max_difference_between_2_SSRs):        100\
 GFF:                                                     true
 
-#### modify the resulting gff files
+#### modify the resulting gff files:
 for i in \*.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) print $1 "\t" $4-100 "\t" $5+100}' > $i.mod.gff; echo "processing $i"; done
 
 *this process removes any compound SSRs and calculates how much flanking sequence is available.
 
-### concatenated the modified gff files
+### concatenated the modified gff files:
 for i in \*.mod.gff; do cat $i >> cat.gff; echo "processing $i"; done
 
-#### remove SSRs that do not have sufficient flanking seqeunce
+#### remove SSRs that do not have sufficient flanking seqeunce:
 
 awk '($2 >= 0)' cat.gff > cat_filter1.gff 
 
-#### use bedtools getfasta to make the modified reference
+#### use bedtools getfasta to make the modified reference:
 
 bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo my_modified_Reference.fasta
 
-#### Mapping
+#### MAPPING
 
-Map trimmed and quality controlled fastq files to the modified reference.  We provide an example using BWA mem, however any mapping software should work (minimap2, bowtie, etc.). The illumina reads should be  To map FASTQ files with 
+Map trimmed and quality controlled Illumina reads (FASTQ) to the modified reference. We provide an example using BWA mem below, however any mapping software should work (minimap2, bowtie2, etc.). The illumina reads should be quality controlled (e.g., Trimmomatic) with PCR duplicates marked (e.g., Samtools -markdups)  To map Illumina reads with BWA:
 
-### Index the my_Reference file with:
+### Index the my_modified_Reference file with:
 
-bwa index myReferenceForSSRgenotyper.fasta
+bwa index my_modified_Reference.fasta
 
-then map the files with:
+### Mapping reads:
+
+then map the Illumina reads to the my_modified_Reference.fasta with:
 
 for i in \*.fq; do bwa mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done 
 
