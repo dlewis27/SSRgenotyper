@@ -33,7 +33,7 @@ bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo my_modified_Re
 
 ## Map the Illumina reads to the modified reference
 
-Map trimmed and quality controlled Illumina reads (FASTQ) to the modified reference. We provide an example using BWA mem below, however any mapping software should work (minimap2, bowtie2, etc.). The illumina reads should be quality controlled (e.g., Trimmomatic) with PCR duplicates marked (e.g., Samtools -markdups). To map Illumina reads with BWA:
+Map trimmed and quality controlled Illumina reads (FASTQ) to the modified reference. We provide an example using BWA mem below, however any mapping software should work (minimap2, bowtie2, etc.). The illumina reads should be quality controlled (e.g., Trimmomatic) with PCR duplicates marked (e.g., Samtools -markdups). To genotype multiple individuals in a population, each individual should have its own FASTQ file (i.e., one FASTQ per individual, producing one SAM file per individual). To map Illumina reads with BWA:
 
 ### Index the modified reference file:
 
@@ -42,6 +42,8 @@ bwa index my_modified_Reference.fasta my_modified_Reference.fasta
 ### Map the Illumina reads to the modified reference.fasta (single end reads process shown - can be done for paired-end reads):
 
 for i in \*.fq; do bwa mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done 
+
+*each individual is represented by a different .fq file
 
 ### Quality control SAM files for SSRGenotyper
 While the whole SAM file can be passed to SSRGenotyper we encourage users to first filter the sam file with samtools to improve performance:
@@ -56,28 +58,15 @@ ls *.Q45 > samFiles.txt
 
 SSRgenotyper identifies reads mapping to each of the SSR in the modified reference file for each of the SAM files and makes a genotypic call based on the number of SSR units.  Processing of the SAM files is very fast with minimal memory utilization.
 
-usage: python3 SSRgenotyper.py <my_modified_reference.fasta> <SamFiles.txt> <OutputFile>
-
-## Output
-
-A file with a tab separated table that includes the name of the reference sequence as the names of the rows, and the names of the SAM files for the column names. The elements of the table show the number of SSR units found. For example, "9,9" means that the SSR unit was found 9 times. This is likely a homogenous allele. If this were to show "9,8" then reads supporting an allele with 9 SSR units were found as well as reads supporting 8 SSR units. This is a heterozygous allele. If the first number is "0" followed by a negative number, then no alleles were called. The negative number is the code for why no alleles were called. For example "0,-2" shows no alleles were called because no reads in the SAM file mapped to this marker. The following codes are:
-
--1: No SSR was found in the reference sequence.\
--2: No reads from the accession were mapped to this marker.\
--3: More than 2 alleles were found so the marker in this SAM file. It is considered is ambiguous\
--4: Not enough reads with the target SSR were found to support calling an allele. The minimum number of supporting reads is determined by option -S
-
-Three files are generated. The .ssr file has the tab-delimited table and the .ssrstat shows the genotyping statistics. The genepop file ends in .pop
-
+usage: python3 SSRgenotyper.py <my_modified_reference.fasta> <SamFiles.txt> <OutputFileName>
+  
 ## Options
-
-usage: python3 SSRgenotyper.py <ReferenceFile> <SamFiles> <OutputFile>
 
 positional arguments:
 
-**ReferenceFile** - The reference file (FASTA)\
-**SamFiles** - Text document with the SAM file names separated by newlines\                       
-**OutputFile** - Output file name ( ".ssr" will be added onto it)
+**SSR_ReferenceFile** - This is the my_modified_reference.fasta referred to previously (FASTA)
+**SamFiles.txt** - Text document with the SAM file names separated by newlines          
+**OutputFileName** - Output file name (".ssr" extension will be added)
 
 optional arguments:
   
@@ -96,3 +85,15 @@ optional arguments:
 **-m mismatch** The number of mismatch allowance for each flanking region. Insertions, deletions, and substitutions considered (default = 0)
 ## Example
 python3 SSRgenotyperV2.py myReferenceForSSRgenotyper.fasta samFiles.txt myOutput -F 20 -S 1
+
+## Output
+
+The basic output file is a tab delimited table with SSR names (and position) in rows and the names of the SAM files (individuals) as column names. The genotypic call in the table reflect the number of SSR units found for each individual SAM file (one Sam file per individual). For example, "9,9" means that the SSR unit was found 9 times. This is likely a homogenous allele. If this were to show "9,8" then reads supporting an allele with 9 SSR units were found as well as reads supporting 8 SSR units. This is a heterozygous allele. If the first number is "0" followed by a negative number, then no alleles were called. The negative number is the code for why no alleles were called. For example "0,-2" shows no alleles were called because no reads in the SAM file mapped to this marker. The following codes are:
+
+-1: No SSR was found in the reference sequence.\
+-2: No reads from the accession were mapped to this marker.\
+-3: More than 2 alleles were found so the marker in this SAM file. It is considered is ambiguous\
+-4: Not enough reads with the target SSR were found to support calling an allele. The minimum number of supporting reads is determined by option -S
+
+Three files are generated. The .ssr file has the tab-delimited table and the .ssrstat shows the genotyping statistics. The genepop file ends in .pop
+
