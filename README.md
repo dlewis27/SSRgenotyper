@@ -2,11 +2,9 @@
 
 SSRgenotyper will find simple sequence repeats (SSRs) of lengths 2, 3 and 4 from SAM files and a modified reference fasta. Mono-nucleotide SSRs are excluded. Soft masked sequences are excluded during the analysis process. SSRgenotyper has only been tested on diploid organisms - use with caution on polyploids. Several output are possible including a simple table with the SSR marker name, position and SSR alleles (defined by the repeat number of the repeat motif). Specific output files for genetic diversity analysis include a Genepop formated file and a traditional A, H, B mapping files output can be selected - phased to the parents of the population for bi-parental linkage mapping populations. Questions regarding useage can be sent to ssrgenotyperhelp@gmail.com.
 
-## Making the modified reference
-
 SSRgenotyper requires a modified reference which lists each targeted SSR with ~100 bp of flanking sequence. The modified reference can be easily created using a combination of easy to use bioinformatic tools, specifically [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip) and Bedtools. MISA is run against the reference genome of the species of interest to identify the location of the targeted SSRs. The reference genome can be a gold standard reference genome or a simple draft reference. Bedtools is then used to extract the targeted SSRs and their flanking sequences. Flanking sequence of ~100 bp upstream and downstream are needed for mapping/genotyping purposes. We refer to the MISA/Bedtools output as the modified reference (below it is referred to as "my_modified_Reference.fasta").
 
-## To make the modified reference with MISA and Bedtools:
+## Make the modified reference with MISA and Bedtools:
 
 ### MISA:
 perl misa.pl my_Reference.fasta
@@ -33,7 +31,7 @@ awk '($2 >= 0)' cat.gff > cat_filter1.gff
 
 bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo my_modified_Reference.fasta
 
-## MAPPING
+## Map the Illumina reads to the modified reference
 
 Map trimmed and quality controlled Illumina reads (FASTQ) to the modified reference. We provide an example using BWA mem below, however any mapping software should work (minimap2, bowtie2, etc.). The illumina reads should be quality controlled (e.g., Trimmomatic) with PCR duplicates marked (e.g., Samtools -markdups). To map Illumina reads with BWA:
 
