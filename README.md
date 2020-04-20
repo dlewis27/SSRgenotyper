@@ -1,6 +1,6 @@
 # SSRgenotyper
 
-SSRgenotyper will find simple sequence repeats (SSRs) of lengths 2, 3 and 4 from SAM files and a modified reference fasta. Mono-nucleotide SSRs are excluded. Soft masked sequences are excluded during the analysis process. SSRgenotyper has only been tested on diploid organisms - use with caution on polyploids. Several output are possible including a simple table with the SSR marker name, position and SSR alleles (defined by the repeat number of the repeat motif). Specific output files for genetic diversity analysis include a Genepop formated file and a traditional A, H, B mapping files output can be selected - phased to the parents of the population for bi-parental linkage mapping populations. Questions regarding useage can be sent to ssrgenotyperhelp@gmail.com.
+Many programs can identify SSR motifs in genomic data. SSRgenotyper extends SSR identification to genotype calling across multiple individual in diversity panels and mapping populations. SSRgenotyper will find simple sequence repeats (SSRs) of lengths 2, 3 and 4 from SAM files and a modified reference fasta. Mono-nucleotide SSRs are excluded. Soft masked sequences are excluded during the analysis process. SSRgenotyper has only been tested on diploid organisms - use with caution on polyploids. Several output are possible including a simple table with the SSR marker name, position and SSR alleles (defined by the repeat number of the repeat motif). Specific output files for genetic diversity analysis include a Genepop formated file and a traditional A, H, B mapping files output can be selected - phased to the parents of the population for bi-parental linkage mapping populations. Questions regarding useage can be sent to ssrgenotyperhelp@gmail.com.
 
 SSRgenotyper requires a modified reference which lists each targeted SSR with ~100 bp of flanking sequence. The modified reference can be easily created using a combination of easy to use bioinformatic tools, specifically [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip) and Bedtools. MISA is run against the reference genome of the species of interest to identify the location of the targeted SSRs. The reference genome can be a gold standard reference genome or a simple draft reference. Bedtools is then used to extract the targeted SSRs and their flanking sequences. Flanking sequence of ~100 bp upstream and downstream are needed for mapping/genotyping purposes. We refer to the MISA/Bedtools output as the modified reference (below it is referred to as "my_modified_Reference.fasta").
 
@@ -45,16 +45,16 @@ for i in \*.fq; do bwa mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done
 
 *each individual is represented by a different .fq file
 
-### Quality control SAM files for SSRGenotyper
-While the whole SAM file can be passed to SSRGenotyper we encourage users to first filter the sam file with samtools to improve performance:
+### Quality control SAM files for SSRgenotyper
+While the whole SAM file can be passed to SSRgenotyper we encourage users to first filter the sam file with samtools to improve performance:
 
 for i in *.sam; do samtools view $i -q 45 > $i.Q45; done
 
-This will remove reads with mapping quality less than 45. SSRgenotyper provides further filtering (option -Q) that can be used for additional filter stringency. The SAM files do not need to be sorted or indexed. Lastly a file listing all SAM files to be processed is required by SSRGenotyper and can be produced with:
+This will remove reads with mapping quality less than 45. SSRgenotyper provides further filtering (option -Q) that can be used for additional filter stringency. The SAM files do not need to be sorted or indexed. Lastly a file listing all SAM files to be processed is required by SSRgenotyper and can be produced with:
 
 ls *.Q45 > samFiles.txt
 
-## How it Works
+## How SSRgenotyper Works
 
 SSRgenotyper identifies reads mapping to each of the SSR in the modified reference file for each of the SAM files and makes a genotypic call based on the number of SSR units.  Processing of the SAM files is very fast with minimal memory utilization.
 
