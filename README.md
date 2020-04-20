@@ -35,13 +35,13 @@ bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo my_modified_Re
 
 ## MAPPING
 
-Map trimmed and quality controlled Illumina reads (FASTQ) to the modified reference. We provide an example using BWA mem below, however any mapping software should work (minimap2, bowtie2, etc.). The illumina reads should be quality controlled (e.g., Trimmomatic) with PCR duplicates marked (e.g., Samtools -markdups)  To map Illumina reads with BWA:
+Map trimmed and quality controlled Illumina reads (FASTQ) to the modified reference. We provide an example using BWA mem below, however any mapping software should work (minimap2, bowtie2, etc.). The illumina reads should be quality controlled (e.g., Trimmomatic) with PCR duplicates marked (e.g., Samtools -markdups). To map Illumina reads with BWA:
 
-### Index the my_modified_Reference file with:
+### Index the modified reference file:
 
 bwa index my_modified_Reference.fasta
 
-### Map the Illumina reads to the my_modified_Reference.fasta:
+### Map the Illumina reads to the modified reference.fasta:
 
 for i in \*.fq; do bwa mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done 
 
