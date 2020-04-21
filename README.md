@@ -89,7 +89,7 @@ python3 SSRgenotyper.py my_modified_reference.fasta SamFiles.txt OutputFileName 
 
 ## Output
 
-###The .ssr file 
+### The .ssr file 
 The basic output file is a tab delimited table with SSR names (and position) in rows and the names of the sam files (individuals) as column names. The genotypes are called as alleles that reflect the number of repeat units found at each SSR locus.  For example, a "9,9" genotypic call reflects a homozygote where all the reads mapping to the SSR locus had a repeat unit of “9”.  Similarly, a “9,7” genotypic call reflects a heterozygote where reads with both repeat numbers of “9” and “7” were identified in the read mapping.  
 
 If the first number is "0" followed by a negative number, then no alleles were called. The second number codes for why no alleles were called. For example "0,-2" indicates that no alleles were called because no reads mapped to this marker. All no call codes are defined here:
@@ -99,10 +99,10 @@ If the first number is "0" followed by a negative number, then no alleles were c
 -3: More than expected two alleles were found.  See “—SpuriousAlleleRemoval”. \
 -4: Insufficient reads were identified to support calling an allele. The minimum number of supporting reads need to support a call is determined by “-S”.\ 
 
-###The .ssrstat
+### The .ssrstat
 This file includes basic genotyping statistics.
  
-###The genepop file ends in .pop
+### The genepop file ends in .pop
 
 Need to add more info here!
 
