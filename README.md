@@ -87,7 +87,7 @@ Optional arguments:
 ## Example
 python3 SSRgenotyper.py my_modified_reference.fasta SamFiles.txt OutputFileName -H 30 -S 3
 
-## Output
+## Output files
 
 ### The .ssr file 
 The basic output file is a tab delimited table with SSR names (and position) in rows and the names of the sam files (individuals) as column names. The genotypes are called as alleles that reflect the number of repeat units found at each SSR locus.  For example, a "9,9" genotypic call reflects a homozygote where all the reads mapping to the SSR locus had a repeat unit of “9”.  Similarly, a “9,7” genotypic call reflects a heterozygote where reads with both repeat numbers of “9” and “7” were identified in the read mapping.  
