@@ -99,10 +99,9 @@ If the first number is "0" followed by a negative number, then no alleles were c
 -3: More than expected two alleles were found.  See “—SpuriousAlleleRemoval”. \
 -4: Insufficient reads were identified to support calling an allele. The minimum number of supporting reads need to support a call is determined by “-S”.\ 
 
-### The .ssrstat
+### The .ssrstat file
 This file includes basic genotyping statistics.
  
-### The genepop file ends in .pop
-
-Need to add more info here!
+### The .pop file
+This is a genepop file.  Need to add more info here!
 
