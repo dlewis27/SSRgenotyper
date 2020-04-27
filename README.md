@@ -16,12 +16,12 @@ interruptions(max_difference_between_2_SSRs):        100\
 GFF:                                                     true
 
 ### Modify the gff files:
-for i in \*.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) print $1 "\t" $4-100 "\t" $5+100}' > $i.mod.gff; echo "processing $i"; done
+for i in *.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) print $1 "\t" $4-100 "\t" $5+100}' > $i.mod.gff; echo "processing $i"; done
 
 *this process removes any compound SSRs and calculates how much flanking sequence is available.
 
 ### Concatenated the modified gff files:
-for i in \*.mod.gff; do cat $i >> cat.gff; echo "processing $i"; done
+for i in *.mod.gff; do cat $i >> cat.gff; echo "processing $i"; done
 
 ### Remove SSRs that do not have sufficient flanking seqeunce:
 
