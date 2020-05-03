@@ -35,7 +35,7 @@ parser.add_argument("-W", "--WindowOffset", help = "Offset on each side of the r
 parser.add_argument("-f", "--filterMissingData", help = "The maximum missing data threshold for reporting an SSR locus, between 0 and 1 (default = 1)", type=float, default = 1)
 parser.add_argument("-Q", "--QualityFilter", help = "Only Reads with the equal to or greater than the specified mapping quality are used to support genotype calling (default = 45)", type=int, default=45)
 parser.add_argument("-A", "--AlignmentShow", help = "Provide marker name and SAM file name seperated by ','. This will also be the output file name (default = '')", type=str, default = "")
-parser.add_argument("-L", "--LinkageMapFile", help = "Output a table showing relation to two parents. Make sure the first 2 SAM file names are the parents", nargs='?', type=float, const=.3)
+parser.add_argument("-L", "--LinkageMapFile", help = "Output a table showing relation to two parents. Make sure the first 2 SAM file names are the parents. Value given is fraction of 2nd most common allele required to infer missing parent", nargs='?', type=float, const=.3)
 parser.add_argument("-s", "--spuriousAlleleRemoval", help = "If the reads supporting the 3rd most supported allele divided by the total reads supporting the first 2 alleles is equal to or greater than this, the call will be ambiguous.", type=float, default = .1)
 parser.add_argument("-m", "--mismatch", help = "The number of mismatch allowance for each flanking region. Insertions, deletions, and substitutions considered (default = 0)", type = int, default = 0)
 parser.add_argument("-N", "--NameSize", help = "The number of characters to be printed from each SAM file name in the output table (default = 100)", type= int, default = 100)
