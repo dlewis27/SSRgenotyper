@@ -415,7 +415,7 @@ def debug(debugName):
 
 def parentguess(known, r):
     allele = {}
-    total = (len(r)-2)*2
+    total = (len(r)-3)*2
     for e in r[4:]:
         if e[0] != 0:
             if e[0] not in allele:
