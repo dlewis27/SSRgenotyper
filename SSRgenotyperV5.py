@@ -66,7 +66,7 @@ minRefFreq = args.RefUnitsMin
 minSSRfreq = args.PopUnitsMin 
 minNumReads = args.Support 
 numFlankNucs = args.FlankSize
-nameSize = args.SamNameSize
+nameSize = args.NameSize
 refFilter = args.filterMissingData
 qualityFilter = args.QualityFilter
 debugName = args.AlignmentShow
@@ -416,7 +416,7 @@ def debug(debugName):
 def parentguess(known, r):
     allele = {}
     total = (len(r)-2)*2
-    for e in r[2:]:
+    for e in r[4:]:
         if e[0] != 0:
             if e[0] not in allele:
                 allele[e[0]] = 1
@@ -456,33 +456,33 @@ def makeMap(outputDf):
     print("creating map")
     
     #convert table elements to list of rows
-    for row in outputDf.iterrows():
-        newRow = []
-        for element in row[5:]:
-            s = element.split(',')
-            newRow.append([s[0], s[1]])
+    for index, row in outputDf.iterrows():
+        i
+        newRow = [row[0]]
+        for element in row[3:]:
+            newRow.append(element.split(','))
         listTable.append(newRow)
     
     #
     for r in listTable:
-        linkMapRow =[]
-        p1 = r[0][0]
-        p2 = r[1][0]
+        linkMapRow =[r[0]]
+        p1 = r[1][0]
+        p2 = r[2][0]
         #both missing
-        if r[0][0] == 0 and r[1][0] == 0:
+        if r[1][0] == 0 and r[2][0] == 0:
             continue
         #check if het, returns true if het
-        elif checkHet(r[0]) or checkHet(r[1]):
+        elif checkHet(r[1]) or checkHet(r[2]):
             continue
         #check if A and B are same (only compare first num b/c won't be het)
-        elif r[0][0] == r[1][0]:
+        elif r[1][0] == r[2][0]:
             continue
-        elif r[0][0] == 0:
-            p1 = parentguess(r[1][0],r)
         elif r[1][0] == 0:
-            p2 = parentguess(r[0][0],r)
+            p1 = parentguess(r[2][0],r)
+        elif r[2][0] == 0:
+            p2 = parentguess(r[1][0],r)
         #procced normally stuff
-        for e in r[2:]:
+        for e in r[1:]:
             if e[0] == p1 and e[1] == p1:
                 linkMapRow.append('A')
             elif e[0] == p2 and e[1] == p2:
@@ -495,10 +495,10 @@ def makeMap(outputDf):
         
         
     #transform newTableAsList to newTable
-    newDf = pd.DataFrame(listTable)
+    newDf = pd.DataFrame(linkMap)
         #get headers from old table
     headers = outputDf.columns.values.tolist()
-    del headers[1:5]
+    del headers[1:3]
     newDf.columns = headers
     
     newDf.to_csv(outFile + ".map", sep= "\t")
