@@ -58,7 +58,7 @@ ls *.Q45 > samFiles.txt
 
 SSRgenotyper identifies reads mapping to each of the SSR in the modified reference file for each of the SAM files and makes a genotypic call based on the number of SSR units.  Processing of the SAM files is very fast with minimal memory utilization.
 
-usage: python3 SSRgenotyper.py <my_modified_reference.fasta> <SamFiles.txt> OutputFileName
+usage: python3 SSRgenotyper.py <my_modified_reference.fasta> <SamFiles.txt> <OutputFileName>
   
 ## Options
 
