@@ -47,29 +47,29 @@ We trim and quality control our reads with [Trimmomatic](https://github.com/timf
 
 ### Remove PCR duplicate reads
 Sort sam files by name:
-for i in *.sam; do samtools sort -n -o $i.sorted $i; done
+`for i in *.sam; do samtools sort -n -o $i.sorted $i; done`
 
 Identify mate coordinates:
-for i in *.sorted; do samtools fixmate -m $i $i.fixmate; done 
+`for i in *.sorted; do samtools fixmate -m $i $i.fixmate; done` 
 
 Re-sort sam files:
-for i in *.fixmate; do samtools sort -o $i.position $i; done
+`for i in *.fixmate; do samtools sort -o $i.position $i; done`
 
 Mark and remove duplicates:
-for i in *.position; do samtools markdup -r $i $i.markdup; done
+`for i in *.position; do samtools markdup -r $i $i.markdup; done`
 
 *each sample will have a markdup file where PCR duplicates have been removed (the other files can be deleted)
 
 ### Quality control SAM files for SSRgenotyper
 While the whole SAM file can be passed to SSRgenotyper we encourage users to first filter the markdup file with samtools to improve performance:
 
-for i in *.markdup; do samtools view $i -q 45 > $i.Q45.sam; done
+`for i in *.markdup; do samtools view $i -q 45 > $i.Q45.sam; done`
 
 This will remove reads with mapping quality less than 45 as well as unnessary header information. SSRgenotyper provides further filtering (option -Q) that can be used for additional filter stringency if required. 
 
 A file listing all SAM files to be processed is required by SSRgenotyper and can be produced with:
 
-ls *.Q45 > samFiles.txt
+`ls *.Q45 > samFiles.txt`
 
 ## How SSRgenotyper Works
 
