@@ -33,24 +33,41 @@ bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo my_modified_Re
 
 ## Map the Illumina reads to the modified reference
 
-Map trimmed and quality-controlled Illumina reads (FASTQ) to the modified reference. We provide an example using BWA mem below, however any mapping software should work (minimap2, bowtie2, etc.). The illumina reads should be quality controlled (e.g., Trimmomatic) with PCR duplicates marked (e.g., Samtools -markdups). To genotype multiple individuals in a population, each individual should have its own FASTQ file (i.e., one FASTQ per individual, producing one SAM file per individual). To map Illumina reads with BWA:
+We trim and quality control our reads with [Trimmomatic](https://github.com/timflutre/trimmomatic), which produces a forward (_1P.fq.gz) and a reverse reads files (_2P.fq.gz). The trimmed reads are then mapped to the modified reference using [BWA](https://github.com/lh3/bwa), however any short read mapping software should work (minimap2, bowtie2, etc.). After mapping the reads, PCR duplicates are removed using [Samtools](https://github.com/samtools/samtools) -markdups. To genotype multiple individuals in a population, each individual should have its own FASTQ file (i.e., one FASTQ per individual, producing one SAM file per individual). The basic steps are as follows:
 
 ### Index the modified reference file:
 
 bwa index my_modified_Reference.fasta my_modified_Reference.fasta
 
-### Map the Illumina reads to the modified reference.fasta (single end reads process shown - can be done for paired-end reads):
+### Map the Illumina reads to the modified reference.fasta (paired-end reads process shown):
 
-for i in *.fq; do bwa mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done 
+for forward_file in *_1P.fq.gz; do name=`echo $forward_file | sed 's/_1P.fq.gz//'`; bwa mem -M ../reference/my_modified_Reference.fasta ${name}_1P.fq.gz ${name}_2P.fq.gz -o $name.sam; done
 
-*each individual is represented by a different .fq file
+*each sample has a *_1P.fq.gz and *_2P.fq.gz file
+
+### Remove PCR duplicate reads
+Sort sam files by name:
+for i in *.sam; do samtools sort -n -o $i.sorted $i; done
+
+Identify mate coordinates:
+for i in *.sorted; do samtools fixmate -m $i $i.fixmate; done 
+
+Re-sort sam files:
+for i in *.fixmate; do samtools sort -o $i.position $i; done
+
+Mark and remove duplicates:
+for i in *.position; do samtools markdup -r $i $i.markdup; done
+
+*each sample will have a markdup file where PCR duplicates have been removed (the other files can be deleted)
 
 ### Quality control SAM files for SSRgenotyper
-While the whole SAM file can be passed to SSRgenotyper we encourage users to first filter the sam file with samtools to improve performance:
+While the whole SAM file can be passed to SSRgenotyper we encourage users to first filter the markdup file with samtools to improve performance:
 
-for i in *.sam; do samtools view $i -q 45 > $i.Q45; done
+for i in *.markdup; do samtools view $i -q 45 > $i.Q45.sam; done
 
-This will remove reads with mapping quality less than 45 as well as unnessary header information. SSRgenotyper provides further filtering (option -Q) that can be used for additional filter stringency. The SAM files do not need to be sorted or indexed. Lastly a file listing all SAM files to be processed is required by SSRgenotyper and can be produced with:
+This will remove reads with mapping quality less than 45 as well as unnessary header information. SSRgenotyper provides further filtering (option -Q) that can be used for additional filter stringency if required. 
+
+A file listing all SAM files to be processed is required by SSRgenotyper and can be produced with:
 
 ls *.Q45 > samFiles.txt
 
