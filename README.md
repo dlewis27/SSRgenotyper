@@ -33,7 +33,7 @@ GFF:                                                     true
 
 ## Map the Illumina reads to the modified reference
 
-We trim and quality control our reads with [Trimmomatic](https://github.com/timflutre/trimmomatic), which produces paired forward (_1P.fq.gz) and a reverse reads files (_2P.fq.gz) for each sample. The trimmed reads are then mapped to the modified reference using [BWA](https://github.com/lh3/bwa), however any short read mapping software should work (minimap2, bowtie2, etc.). After mapping the reads, PCR duplicates are removed using [Samtools](https://github.com/samtools/samtools) -markdups. To genotype multiple individuals in a population, each individual should have its own FASTQ file (i.e., one FASTQ per individual, producing one SAM file per individual). The basic steps are as follows:
+We trim and quality control our reads with [Trimmomatic](https://github.com/timflutre/trimmomatic), which produces paired forward (_1P.fq.gz) and a reverse reads files (_2P.fq.gz) for each sample. In our example code below the trimmed reads are then mapped to the modified reference using [BWA](https://github.com/lh3/bwa), however any short read mapping software should work (minimap2, bowtie2, etc.). After mapping the reads, PCR duplicates are removed using [Samtools](https://github.com/samtools/samtools) -markdups. To genotype multiple individuals in a population, each individual should have its own FASTQ file (i.e., one FASTQ per individual, producing one SAM file per individual). The basic steps are as follows:
 
 ### Index the modified reference file:
 
