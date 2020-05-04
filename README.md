@@ -16,20 +16,20 @@ interruptions(max_difference_between_2_SSRs):        100\
 GFF:                                                     true
 
 ### Modify the gff files:
-for i in *.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) print $1 "\t" $4-100 "\t" $5+100}' > $i.mod.gff; echo "processing $i"; done
+`for i in *.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) print $1 "\t" $4-100 "\t" $5+100}' > $i.mod.gff; echo "processing $i"; done`
 
 *this process removes any compound SSRs and calculates how much flanking sequence is available.
 
 ### Concatenated the modified gff files:
-for i in *.mod.gff; do cat $i >> cat.gff; echo "processing $i"; done
+`for i in *.mod.gff; do cat $i >> cat.gff; echo "processing $i"; done`
 
 ### Remove SSRs that do not have sufficient flanking seqeunce:
 
-awk '($2 >= 0)' cat.gff > cat_filter1.gff 
+`awk '($2 >= 0)' cat.gff > cat_filter1.gff` 
 
 ### Use bedtools getfasta to make the modified reference:
 
-bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo my_modified_Reference.fasta
+`bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo my_modified_Reference.fasta`
 
 ## Map the Illumina reads to the modified reference
 
@@ -37,7 +37,7 @@ We trim and quality control our reads with [Trimmomatic](https://github.com/timf
 
 ### Index the modified reference file:
 
-bwa index my_modified_Reference.fasta my_modified_Reference.fasta
+`bwa index my_modified_Reference.fasta my_modified_Reference.fasta`
 
 ### Map the Illumina reads to the modified reference.fasta (paired-end reads process shown):
 
