@@ -106,14 +106,14 @@ Optional arguments:
 ## Output files
 
 ### The .ssr file 
-The basic output file is a tab delimited table with SSR names (and position) in rows and the names of the SAM files (individuals) as column names. The genotypes are called as alleles that reflect the number of repeat units found at each SSR locus.  For example, a "9,9" genotypic call reflects a homozygote where all the reads mapping to the SSR locus had a repeat unit of “9”.  Similarly, a “9,7” genotypic call reflects a heterozygote where reads with both repeat numbers of “9” and “7” were identified in the read mapping.  
+The basic output file is a tab delimited table with SSR names (and position) in rows and the names of the SAM files (individuals) as column names. The genotypes are called as alleles that reflect the number of repeat units found at each SSR locus.  For example, a "9,9" genotypic call reflects a homozygote where all the reads mapping to the SSR locus had a repeat unit of “9”.  Similarly, a “9,7” genotypic call reflects a heterozygote where reads with both repeat numbers of “9” and “7” were identified in the read mapping. 
 
-If the first number is "0" followed by a negative number, then no alleles were called. The second number codes for why no alleles were called. For example "0,-2" indicates that no alleles were called because no reads mapped to this marker. All no call codes are defined here:
+The missing data in this file provide addition information as to why the genotype was coded as missing.  Specifically missing data is coded as either "0,-1", "0,-2", "0,-3", "0,-4", where the second number codes for why no genotypes were called:
 
--1: No SSR motif was identified in the modified reference sequence.\
--2: No reads mapped to the SSR locus.\
--3: More than expected two alleles were found.  See “--spuriousAlleleRemoval”. \
--4: Insufficient reads were identified to support calling an allele. The minimum number of supporting reads need to support a call is determined by “--Support”.
+0,-1: No SSR motif was identified in the modified reference sequence.\
+0,-2: No reads mapped to the SSR locus.\
+0,-3: More than expected two alleles were found.  See “--spuriousAlleleRemoval”. \
+0,-4: Insufficient reads were identified to support calling an allele. The minimum number of supporting reads need to support a call is determined by “--Support”.
 
 ### The .ssrstat file
 This file includes basic run and genotyping statistics, including a listing of the postional and optional arguments selected as well as various run statistics. The run statistics calculated for each of the various files types (.ssr, .pop, .map) and take into account the missing data and spurious allele filters. The stats reported include total number of SAM files (individual) reported, total number of SSR loci reported, total number of genotypes called (separated as homozygous and heterozygous calls)and the percentage of missing calls.
@@ -123,4 +123,6 @@ This is a genepop file.  Need to add more info here!
 
 ### The .map file
 SSRgenotyper can output an "A,B,H" genotype file to facilitate downstream linkage map construction of biparental populations using linkage map construction software (e.g., [JoinMap](https://www.kyazma.nl/index.php/JoinMap/)). The .map file is a tab delimited table with SSR names in rows and the names of the SAM files (individuals) as column names. The first two SAM files in the SAMFiles.txt should correspond to the two parents of the biparental population and are necessary for correctly phasing the genotypes. The .map file is solicited using the optional argument "--LinkageMapFile". By default if the parental genotypes are monomorphic or if one of the parents is missing a genotypic call the SSR locus is excluded from the output. SSRgenotyper can impute a missing genotype for a parental line based on the segregation patterns observed in the progeny (see --LinkageMapFile documentation above). If one or both of the parents have a heterozygous genotype, phase cannot be determined, and the marker is excluded. Similarly, any progeny genotypic calls that do not agree with the alleles identified in the parents are deemed problematic and are assigned a missing value.  
+
+##High Performance Cluster scripts.
 
