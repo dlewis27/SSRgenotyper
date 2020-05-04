@@ -6,19 +6,18 @@ SSRgenotyper requires a modified reference which lists each targeted SSR with ~1
 
 ## Make the modified reference with MISA and Bedtools:
 
-### MISA:
+## 1. MISA:
 `perl misa.pl my_Reference.fasta`
 
-#### MISA requires a misa.ini file in the directory where MISA is being executed that should looks like this:
+### MISA requires a misa.ini file in the directory where MISA is being executed that should looks like this:
 
 definition(unit_size,min_repeats):                   2-6 3-4 4-4\
 interruptions(max_difference_between_2_SSRs):        100\
 GFF:                                                     true
 
-#### Modify the MISA produced gff files as follows:
+## 2. Modify the MISA produced gff files as follows:
+### Remove any compound SSRs and calculates how much flanking sequence is available at each SSR locus
 `for i in *.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) print $1 "\t" $4-100 "\t" $5+100}' > $i.mod.gff; echo "processing $i"; done`
-
-*this process removes any compound SSRs and calculates how much flanking sequence is available.
 
 ### Concatenated the modified gff files:
 `for i in *.mod.gff; do cat $i >> cat.gff; echo "processing $i"; done`
@@ -31,7 +30,7 @@ GFF:                                                     true
 
 `bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo my_modified_Reference.fasta`
 
-## Map the Illumina reads to the modified reference
+## 3. Map the Illumina reads to the modified reference
 
 We trim and quality control our reads with [Trimmomatic](https://github.com/timflutre/trimmomatic), which produces paired forward (_1P.fq.gz) and a reverse reads files (_2P.fq.gz) for each sample. In our example code below the trimmed reads are then mapped to the modified reference using [BWA](https://github.com/lh3/bwa), however any short read mapping software should work (minimap2, bowtie2, etc.). After mapping the reads, PCR duplicates are removed using [Samtools](https://github.com/samtools/samtools) -markdups. To genotype multiple individuals in a population, each individual should have its own FASTQ file (i.e., one FASTQ per individual, producing one SAM file per individual). The basic steps are as follows:
 
