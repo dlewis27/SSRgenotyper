@@ -96,8 +96,8 @@ If the first number is "0" followed by a negative number, then no alleles were c
 
 -1: No SSR motif was identified in the modified reference sequence.\
 -2: No reads mapped to the SSR locus.\
--3: More than expected two alleles were found.  See “—SpuriousAlleleRemoval”. \
--4: Insufficient reads were identified to support calling an allele. The minimum number of supporting reads need to support a call is determined by “-S”.
+-3: More than expected two alleles were found.  See “--spuriousAlleleRemoval”. \
+-4: Insufficient reads were identified to support calling an allele. The minimum number of supporting reads need to support a call is determined by “--Support”.
 
 ### The .ssrstat file
 This file includes basic genotyping statistics.
