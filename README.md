@@ -128,18 +128,18 @@ SSRgenotyper can output an "A,B,H" genotype file to facilitate downstream linkag
 
 ## High Performance Cluster scripts
 
-For users wishing to prepare their SAM files using HPC clusters we provide an example job scripts for SLURM based systems that can be easily manipulated for other HPC scheduling systems. The following script will perform all bwa mapping, samtools markdups and remove read with less quality mapping statistics less than 45.
+For users wishing to prepare their SAM files using an HPC cluster we provide an example job scripts for SLURM based systems that can be easily manipulated for other HPC scheduling systems. The following script will perform bwa mapping, samtools sort and markdups as well as remove read with poor mapping quality (q<45).
 
 #!/bin/bash
 
-#SBATCH --time=8:00:00   # walltime
-#SBATCH --ntasks=4   # number of processor cores (i.e. tasks)
-#SBATCH --nodes=1   # number of nodes
-#SBATCH --mem-per-cpu=4G   # memory per CPU core
-#SBATCH -J "bwa_mem"   # job name
+#SBATCH --time=8:00:00   # walltime\
+#SBATCH --ntasks=4   # number of processor cores (i.e. tasks)\
+#SBATCH --nodes=1   # number of nodes\
+#SBATCH --mem-per-cpu=4G   # memory per CPU core\
+#SBATCH -J "bwa_mem"   # job name\
 
-module load bwa_0.7.17
-module load samtools/1.6
+module load bwa_0.7.17\
+module load samtools/1.6\
 
 bwa mem -M -t $SLURM_NPROCS $BWA_INDEX ${file}_1P.fq.gz ${file}_2P.fq.gz -o ${file}.sam && samtools sort -n --threads $SLURM_NPROCS -o ${file}.sorted.sam ${file}.sam && samtools fixmate -m ${file}.sorted.sam ${file}.sorted.fixmate.sam && samtools sort --threads $SLURM_NPROCS -o ${file}.sorted.fixmate.position.sam ${file}.sorted.fixmate.sam && samtools markdup -r ${file}.sorted.fixmate.position.sam ${file}.sorted.fixmate.position.markdup.sam && samtools view ${file}.sorted.fixmate.position.markdup.sam -q 45 --threads $SLURM_NPROCS > ${file}.sorted.fixmate.position.markdup.Q45.sam
 
