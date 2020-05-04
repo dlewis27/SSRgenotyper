@@ -78,7 +78,7 @@ SSRgenotyper identifies reads mapping to each of the SSR in the modified referen
   
 ## Options
 
-positional arguments:
+Positional arguments:
 
 **SsrReferenceFile** - This is the my_modified_reference.fasta referred to previously (FASTA)\
 **SamFiles.txt** - Text document with the SAM file names separated by newlines\
@@ -116,8 +116,8 @@ If the first number is "0" followed by a negative number, then no alleles were c
 -4: Insufficient reads were identified to support calling an allele. The minimum number of supporting reads need to support a call is determined by “--Support”.
 
 ### The .ssrstat file
-This file includes basic run and genotyping statistics, including a listing of the optional parameters selected as well as various run statistics. The run statistics include the number of SSR loci identified by SSRgenotyper in modified_reference.fasta file, the number of SSRs loci and samples reported after filtering (--MissingDataFilter; --MissingDataFilter) as well as the total number of genotypes called (including total homozygous and heterozygous calls).
- 
+This file includes basic run and genotyping statistics, including a listing of the postional and optional arguments selected as well as various run statistics. The run statistics calculated for each of the various files types (.ssr, .pop, .map) and take into account the missing data and spurious allele filters. The stats reported include total number of SAM files (individual) reported, total number of SSR loci reported, total number of genotypes called (separated as homozygous and heterozygous calls)and the percentage of missing calls.
+
 ### The .pop file
 This is a genepop file.  Need to add more info here!
 
