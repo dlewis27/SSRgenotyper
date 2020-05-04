@@ -121,8 +121,25 @@ This file includes basic run and genotyping statistics, including a listing of t
 ### The .pop file
 This is a genepop file.  Need to add more info here!
 
-### The .map file
-SSRgenotyper can output an "A,B,H" genotype file to facilitate downstream linkage map construction of biparental populations using linkage map construction software (e.g., [JoinMap](https://www.kyazma.nl/index.php/JoinMap/)). The .map file is a tab delimited table with SSR names in rows and the names of the SAM files (individuals) as column names. The first two SAM files in the SAMFiles.txt should correspond to the two parents of the biparental population and are necessary for correctly phasing the genotypes. The .map file is solicited using the optional argument "--LinkageMapFile". By default if the parental genotypes are monomorphic or if one of the parents is missing a genotypic call the SSR locus is excluded from the output. SSRgenotyper can impute a missing genotype for a parental line based on the segregation patterns observed in the progeny (see --LinkageMapFile documentation above). If one or both of the parents have a heterozygous genotype, phase cannot be determined, and the marker is excluded. Similarly, any progeny genotypic calls that do not agree with the alleles identified in the parents are deemed problematic and are assigned a missing value.  
+All missing data is coded as "000000" (i.e., specific missing codes (e.g., "0,-4" can be determined from the .ssr file). 
 
-##High Performance Cluster scripts.
+### The .map file
+SSRgenotyper can output an "A,B,H" genotype file to facilitate downstream linkage map construction of biparental populations using linkage map construction software (e.g., [JoinMap](https://www.kyazma.nl/index.php/JoinMap/)). The .map file is a tab delimited table with SSR names in rows and the names of the SAM files (individuals) as column names. The first two SAM files in the SAMFiles.txt should correspond to the two parents of the biparental population and are necessary for correctly phasing the genotypes. The .map file is solicited using the optional argument "--LinkageMapFile". By default if the parental genotypes are monomorphic or if one of the parents is missing a genotypic call the SSR locus is excluded from the output. SSRgenotyper can impute a missing genotype for a parental line based on the segregation patterns observed in the progeny (see --LinkageMapFile documentation above). If one or both of the parents have a heterozygous genotype, phase cannot be determined, and the marker is excluded. Similarly, any progeny genotypic calls that do not agree with the alleles identified in the parents are deemed problematic and are assigned a missing value. All missing data is coded as "-" (i.e., specific missing codes (e.g., "0,-4" can be determined from the .ssr file). 
+
+## High Performance Cluster scripts
+
+For users wishing to prepare their SAM files using HPC clusters we provide an example job scripts for SLURM based systems that can be easily manipulated for other HPC scheduling systems. The following script will perform all bwa mapping, samtools markdups and remove read with less quality mapping statistics less than 45.
+
+#!/bin/bash
+
+#SBATCH --time=8:00:00   # walltime
+#SBATCH --ntasks=4   # number of processor cores (i.e. tasks)
+#SBATCH --nodes=1   # number of nodes
+#SBATCH --mem-per-cpu=4G   # memory per CPU core
+#SBATCH -J "bwa_mem"   # job name
+
+module load bwa_0.7.17
+module load samtools/1.6
+
+bwa mem -M -t $SLURM_NPROCS $BWA_INDEX ${file}_1P.fq.gz ${file}_2P.fq.gz -o ${file}.sam && samtools sort -n --threads $SLURM_NPROCS -o ${file}.sorted.sam ${file}.sam && samtools fixmate -m ${file}.sorted.sam ${file}.sorted.fixmate.sam && samtools sort --threads $SLURM_NPROCS -o ${file}.sorted.fixmate.position.sam ${file}.sorted.fixmate.sam && samtools markdup -r ${file}.sorted.fixmate.position.sam ${file}.sorted.fixmate.position.markdup.sam && samtools view ${file}.sorted.fixmate.position.markdup.sam -q 45 --threads $SLURM_NPROCS > ${file}.sorted.fixmate.position.markdup.Q45.sam
 
