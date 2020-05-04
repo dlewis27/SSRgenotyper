@@ -15,7 +15,7 @@ definition(unit_size,min_repeats):                   2-6 3-4 4-4\
 interruptions(max_difference_between_2_SSRs):        100\
 GFF:                                                     true
 
-### Modify the MISA produced gff files as follows:
+#### Modify the MISA produced gff files as follows:
 `for i in *.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) print $1 "\t" $4-100 "\t" $5+100}' > $i.mod.gff; echo "processing $i"; done`
 
 *this process removes any compound SSRs and calculates how much flanking sequence is available.
