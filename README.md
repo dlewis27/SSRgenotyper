@@ -46,13 +46,13 @@ We trim and quality control our reads with [Trimmomatic](https://github.com/timf
 *after trimming with Trimmomatic each sample has a *_1P.fq.gz and *_2P.fq.gz file
 
 ### Remove PCR duplicate reads
-Sort sam files by name:
+Sort sam files by read name:
 `for i in *.sam; do samtools sort -n -o $i.sorted $i; done`
 
 Identify mate coordinates:
 `for i in *.sorted; do samtools fixmate -m $i $i.fixmate; done` 
 
-Re-sort sam files:
+Re-sort sam files by genomic location:
 `for i in *.fixmate; do samtools sort -o $i.position $i; done`
 
 Mark and remove duplicates:
