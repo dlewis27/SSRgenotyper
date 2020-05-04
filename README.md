@@ -128,7 +128,7 @@ SSRgenotyper can output an "A,B,H" genotype file to facilitate downstream linkag
 
 ## High Performance Computing (HPC) scripts
 
-For users wishing to prepare their SAM files using an HPC cluster we provide an example job scripts for SLURM based systems that can be easily manipulated for other HPC scheduling systems. The following script will perform bwa mapping, samtools sort and markdups as well as remove read with poor mapping quality (q<45).
+For users wishing to prepare their SAM files using an HPC cluster we provide an example job scripts for SLURM based systems that can be easily manipulated for other HPC scheduling systems. The following script will perform bwa mapping, samtools sort and markdups as well as remove read with poor mapping quality (q<45):
 
 #!/bin/bash
 
