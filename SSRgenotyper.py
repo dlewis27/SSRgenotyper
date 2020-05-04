@@ -479,8 +479,12 @@ def makeMap(outputDf):
             continue
         elif r[1][0] == 0:
             p1 = parentguess(r[2][0],r)
+            if p1 == None:
+                continue
         elif r[2][0] == 0:
             p2 = parentguess(r[1][0],r)
+            if p2 == None:
+                continue
         #procced normally stuff
         for e in r[1:]:
             if e[0] == p1 and e[1] == p1:
