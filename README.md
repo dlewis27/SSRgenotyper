@@ -41,7 +41,7 @@ bwa index my_modified_Reference.fasta my_modified_Reference.fasta
 
 ### Map the Illumina reads to the modified reference.fasta (single end reads process shown - can be done for paired-end reads):
 
-for i in \*.fq; do bwa mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done 
+for i in *.fq; do bwa mem myReferenceForSSRgenotyper.fasta $i > $i.sam; done 
 
 *each individual is represented by a different .fq file
 
