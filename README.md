@@ -102,7 +102,7 @@ Optional arguments:
 **-N --NameSize** Used to shorten output names. Sam files often have excessively long file names as they often include long sequencing library names. This option will limit the number of characters printed in the output table for each sam file. When using this option make sure that new names will still be unique as sam files with the same name will result in inaccurate results. [100]
 
 ## Example
-python3 SSRgenotyper.py my_modified_reference.fasta SamFiles.txt OutputFileName -H 30 -S 3
+`python3 SSRgenotyper.py my_modified_reference.fasta SamFiles.txt OutputFileName -H 30 -S 3`
 
 ## Output files
 
