@@ -116,7 +116,7 @@ If the first number is "0" followed by a negative number, then no alleles were c
 -4: Insufficient reads were identified to support calling an allele. The minimum number of supporting reads need to support a call is determined by “--Support”.
 
 ### The .ssrstat file
-This file includes basic genotyping statistics.
+This file includes basic run and genotyping statistics, including a listing of the optional parameters selected as well as various run statistics. The run statistics include the number of SSR loci identified by SSRgenotyper in modified_reference.fasta file, the number of SSRs loci and samples reported after filtering (--MissingDataFilter; --MissingDataFilter) as well as the total number of genotypes called (including total homozygous and heterozygous calls).
  
 ### The .pop file
 This is a genepop file.  Need to add more info here!
