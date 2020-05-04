@@ -60,7 +60,7 @@ Mark and remove duplicates:
 *each sample will have a markdup file where PCR duplicates have been removed (the other files can be deleted)
 
 ### Quality control SAM files for SSRgenotyper
-While the whole SAM file can be passed to SSRgenotyper we encourage users to first filter the markdup file with samtools to improve performance:
+While the whole SAM file can be passed to SSRgenotyper we encourage users to first filter the markdup file with Samtools to improve performance:
 
 `for i in *.markdup; do samtools view $i -q 45 > $i.Q45.sam; done`
 
