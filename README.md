@@ -7,7 +7,7 @@ SSRgenotyper requires a modified reference which lists each targeted SSR with ~1
 ## Make the modified reference with MISA and Bedtools:
 
 ### MISA:
-perl misa.pl my_Reference.fasta
+`perl misa.pl my_Reference.fasta`
 
 ### MISA requires a misa.ini file that should looks like this:
 
