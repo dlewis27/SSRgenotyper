@@ -510,6 +510,19 @@ def makeMap(outputDf):
         
     #if not either parent, return U for unknown.
 
+def isMono(row):
+    row = row[3:]
+    print(row)
+    for i in row:
+        if i.startswith('0'):
+            return False
+    return True
+
+def removeMonomorph(df):
+    return df[df.apply(isMono,1) != 0]
+
+
+
 
 def createGenePop(outputDf):
     print("creating genePopFile")
@@ -517,6 +530,8 @@ def createGenePop(outputDf):
     #second line is marker
     #third line is pop
     #data
+    
+    outputDf = removeMonomorph(outputDf)
     title = "SSR markers for "+outFile # first line
     locusList = outputDf.iloc[:,0].tolist()       
     
