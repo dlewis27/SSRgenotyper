@@ -510,16 +510,19 @@ def makeMap(outputDf):
         
     #if not either parent, return U for unknown.
 
-def isMono(row):
+def isNotMono(row):
     row = row[3:]
     print(row)
+    known = []
     for i in row:
-        if i.startswith('0'):
-            return False
+        if i.startswith('0') == False:
+            known.append(i)
+    if len(set(known)) == 1:
+        return False        
     return True
 
 def removeMonomorph(df):
-    return df[df.apply(isMono,1) != 0]
+    return df[df.apply(isNotMono,1) != 0]
 
 
 
