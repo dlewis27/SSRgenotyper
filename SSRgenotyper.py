@@ -512,7 +512,6 @@ def makeMap(outputDf):
 
 def isNotMono(row):
     row = row[3:]
-    print(row)
     known = []
     for i in row:
         if i.startswith('0') == False:
@@ -522,7 +521,7 @@ def isNotMono(row):
     return True
 
 def removeMonomorph(df):
-    return df[df.apply(isNotMono,1) != 0]
+    return df[df.apply(isNotMono,1)]
 
 
 
