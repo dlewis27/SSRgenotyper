@@ -22,6 +22,7 @@ import time
 from Bio import SeqIO
 import argparse
 from datetime import datetime
+import copy
 
 parser = argparse.ArgumentParser()
 parser.add_argument("SsrReferenceFile", help = "The modified reference file (FASTA)")
@@ -232,7 +233,8 @@ def getStats(df):
     results = {'e1':0, 'e2':0, 'e3':0,'e4':0, 'het':0, 'homo':0}
     
     for c in df.columns[3:]:
-        for i in c:
+        for i in df[c]:
+            #first, second = i[0], i[1]
             first, second = i.split(",")
             if second == '-1':
                 results['e1']+=1
@@ -258,22 +260,22 @@ def writeStats(df, runtime, refProcessTime, totalSeqs, foundSeqs):
     statOut.write('SSR Reference: ' + fastaRef + '\n')
     statOut.write('Sam Files: ' + samsDoc + '\n')
     statOut.write('Output file names: ' + outFile + '\n')
-    statOut.write('MinorAlleleHet: ' + majorMinorRatio + '\n')
-    statOut.write('Support: ' + minNumReads + '\n')
-    statOut.write('FlankSize: ' + numFlankNucs + '\n')
-    statOut.write('filterDataLoci: ' + refFilter + '\n')
-    statOut.write('filterDataSam: '+ filterDataSam + '\n')
-    statOut.write('QualityFilter: ' + qualityFilter + '\n')
-    statOut.write('spuriousAlleleRemoval: ' + ambiguousSlavageThreshold + '\n')
-    statOut.write('mismatch: ' + mismatch + '\n')
+    statOut.write('MinorAlleleHet: ' + str(majorMinorRatio) + '\n')
+    statOut.write('Support: ' + str(minNumReads) + '\n')
+    statOut.write('FlankSize: ' + str(numFlankNucs) + '\n')
+    statOut.write('filterDataLoci: ' + str(refFilter) + '\n')
+    statOut.write('filterDataSam: '+ str(filterDataSam) + '\n')
+    statOut.write('QualityFilter: ' + str(qualityFilter) + '\n')
+    statOut.write('spuriousAlleleRemoval: ' + str(ambiguousSlavageThreshold) + '\n')
+    statOut.write('mismatch: ' + str(mismatch) + '\n')
     
     statOut.write('\n--Run Statistics--\n')
-    statOut.write("Total fasta sequences in the modified Reference fasta: " + totalSeqs + "\n")
-    statOut.write("Total SSRs identified in the modified Reference " + foundSeqs + '(' + round((foundSeqs/totalSeqs)*100, 2) + "%)\n") # find sperately when going through mod ref
+    statOut.write("Total fasta sequences in the modified Reference fasta: " + str(totalSeqs) + "\n")
+    statOut.write("Total SSRs identified in the modified Reference " + str(foundSeqs) + '(' + str(round((foundSeqs/totalSeqs)*100, 2)) + "%)\n") # find sperately when going through mod ref
     numSam = len(df.columns[3:])
     totSam = len(samFiles)
-    statOut.write("Total Sam files reported: " + numSam + " of " + totSam + " (" + round((numSam/totSam) *100, 2) + "%)\n")
-    statOut.write("Total number of genotypes called: " + refProcessTime + "\n") # give percentages as well
+    statOut.write("Total Sam files reported: " + str(numSam) + " of " + str(totSam) + " (" + str(round((numSam/totSam) *100, 2)) + "%)\n")
+    statOut.write("Total number of genotypes called: " + str(refProcessTime) + "\n") # give percentages as well
     statOut.write("\tTotal Homozygous calls: " + str(stats['homo']) + "\n")
     statOut.write("\tTotal Heterozygous calls: " + str(stats['het']) + "\n")
     
@@ -284,6 +286,8 @@ def writeStats(df, runtime, refProcessTime, totalSeqs, foundSeqs):
     statOut.write("(-4) Not enough coverage to call: " + str(stats['e4']) + "\n")
     
     statOut.write("RunTime: " + str(runtime) + " minutes" + "\n")
+    if args.LinkageMapFile:
+        statOut.write(mapStatString)
     statOut.close()
 
 def findSamReads(subSam, refInput):
@@ -480,6 +484,8 @@ def checkHet(li):
         return True
     else:
         return False
+
+mapStatString =''
       
 def makeMap(outputDf):
     if outputDf.shape[1] < 5:
@@ -488,11 +494,10 @@ def makeMap(outputDf):
     
     linkMap = []
     listTable = []
-    print("creating map")
+    print("Creating Map")
     
     #convert table elements to list of rows
     for index, row in outputDf.iterrows():
-        i
         newRow = [row[0]]
         for element in row[3:]:
             newRow.append(element.split(','))
@@ -552,28 +557,20 @@ def makeMap(outputDf):
         return
     
     for c in newDf.columns[3:]:
-        for i in c:
+        for i in newDf[c]:
             if i == 'A':
                 numA +=1
             if i == 'B':
                 numB +=1
             if i == 'H':
                 numH +=1
-            if i == 'i':
+            if i == '-':
                 numDash +=1
                 
-    statOut = open(outFile + ".ssrstat", "a")
-    statOut.write('\n--Map Stats--\n')
-    statOut.write('Total loci reported: ' + newDf.shape[0] + '\n')
     total = numA + numB + numH
-    statOut.write('note: percent calulated by (count / (A + B + H)), ignores first 2 SAM files (parents)\n' )
-    statOut.write('Count A: ' + numA + ' (' + round(numA/total, 2)+ '%)\n')
-    statOut.write('Count B: '+ numB + ' (' + round(numB/total, 2)+ '%)\n')
-    statOut.write('Count H: ' + numH + ' (' + round(numH/total, 2)+ '%)\n')
-    statOut.write('Count -: ' + numDash + '\n')
     global parentLociGuess
-    statOut.write('Number of parent genotype guessed: ' + parentLociGuess + '\n')
-    statOut.close()
+    global mapStatString
+    mapStatString = '\n--Map Stats--\n' + 'Total loci reported: ' + str(newDf.shape[0]) + '\n' + 'note: percent calulated by (count / (A + B + H)), ignores first 2 SAM files (parents)\n'+'Count A: ' + str(numA) + ' (' + str(round(numA/total*100, 2))+ '%)\n'+'Count B: '+ str(numB) + ' (' + str(round(numB/total*100, 2))+ '%)\n'+'Count H: ' + str(numH) + ' (' + str(round(numH/total*100, 2))+ '%)\n'+'Count -: ' + str(numDash) + '\n'+'Number of parent genotype guessed: ' + str(parentLociGuess) + '\n'
 
 def isNotMono(row):
     row = row[3:]
@@ -647,10 +644,12 @@ def main():
         outputDf = filterTableSam(outputDf)
     outputDf.to_csv(outFile + ".ssr", sep= "\t")
     if args.Genepop:
-        createGenePop(outputDf)
+        a = copy.deepcopy(outputDf)
+        createGenePop(a)
     #pop.to_csv(outFile + ".pop", sep= '\t')
     if args.LinkageMapFile:
-        makeMap(outputDf)
+        b = copy.deepcopy(outputDf)
+        makeMap(b)
     
     endTime = time.time()
     runtime = endTime-startTime
