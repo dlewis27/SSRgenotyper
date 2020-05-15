@@ -269,7 +269,7 @@ def writeStats(df, runtime, refProcessTime, totalSeqs, foundSeqs):
     
     statOut.write('\n--Run Statistics--\n')
     statOut.write("Total fasta sequences in the modified Reference fasta: " + totalSeqs + "\n")
-    statOut.write("Total SSRs identified in the modified Reference " + foundSeqs + '(' + round((foundSeqs/totalSeqs)*100, 2) "%)\n") # find sperately when going through mod ref
+    statOut.write("Total SSRs identified in the modified Reference " + foundSeqs + '(' + round((foundSeqs/totalSeqs)*100, 2) + "%)\n") # find sperately when going through mod ref
     numSam = len(df.columns[3:])
     totSam = len(samFiles)
     statOut.write("Total Sam files reported: " + numSam + " of " + totSam + " (" + round((numSam/totSam) *100, 2) + "%)\n")
