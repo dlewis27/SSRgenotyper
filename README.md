@@ -22,7 +22,7 @@ GFF:                                                     true
 ### Concatenated the modified gff files:
 `for i in *.mod.gff; do cat $i >> cat.gff; echo "processing $i"; done`
 
-### Remove SSRs that do not have sufficient flanking seqeunce:
+### Remove SSRs that do not have sufficient flanking sequence:
 
 `awk '($2 >= 0)' cat.gff > cat_filter1.gff` 
 
