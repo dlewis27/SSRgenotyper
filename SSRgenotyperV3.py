@@ -328,6 +328,8 @@ def debugProcessSamString(samString, refInput):
     result = debugFindSpecificRepeat(samString, refPattern, flankL, flankR)
     if result == None:
         return None, None
+    else:
+        return result
     
     #return L location and R location. Return None for a location if None found
 
@@ -461,8 +463,8 @@ def debug2(debugName):
             if flankLlocation == None or flankRlocation == None:
                 badReads.append(s + "  ---" + subName + "---")
             else:
-                offset = " " * (flankLlocationRef.start() - flankLlocation.start() + 20) #change this 20 to something more dynamic
-                newS = offset + s[:flankLlocation.start() + numFlankNucs] + "   " + s[flankLlocation.start() + numFlankNucs:flankRlocation.start()] + "  "+ s[flankRlocation.start():]
+                offset = " " * (flankLlocationRef.start() - flankLlocation + 44) #change this 20 to something more dynamic
+                newS = offset + s[:flankLlocation] + "   " + s[flankLlocation:flankRlocation] + "  "+ s[flankRlocation:]
                 goodReads.append(newS + "  ---" + subName + "---")
         for g in goodReads:
             g2 = g.rstrip("\n")
