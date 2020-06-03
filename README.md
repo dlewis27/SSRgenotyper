@@ -99,7 +99,7 @@ Optional arguments:
 Data filtering parameters\
 **-F --FilterDataLoci** The maximum missing data threshold for reporting an SSR locus. For example, if "-F 0.3" then any SSR loci with greater than 30% missing data will not be reported. Between 0 and 1. [0.30]\
 **-f --filterDataSam**. The maximum missing data threshold for reporting an individual (SAM file).  For example, if "-f 0.3" then any individual with greater than 30% missing data will not be reported.  Between 0 and 1. [0.30]\
-**-Q --QualityFilter** Only Reads with equal to or greater than the specified mapping quality (MAPQ) threshold are utilized in the genotype calling.  MAPQ (SAM file format, column 5) defines the probablity that a read is wrongly mapped: MAPQ = -10 * long10(p), where p is the probabilty that the read is incorrectly mapped. [45]\
+**-Q --QualityFilter** Only Reads with equal to or greater than the specified mapping quality (MAPQ) threshold are utilized in the genotype calling. MAPQ (SAM file format, column 5) defines the probability that a read is wrongly mapped: MAPQ = -10 * long10(p), where p is the probability that the read is incorrectly mapped. [45]\
 **-N --NameSize** Used to shorten output names. SAM files often have excessively long file names as they often include long sequencing library names. This option will limit the number of characters printed in the output table for each SAM file. When using this option make sure that new names will still be unique as SAM files with the same name will result in inaccurate results. [100]
 
 Output file types\
