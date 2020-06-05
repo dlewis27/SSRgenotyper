@@ -32,7 +32,7 @@ parser.add_argument("-M","--MinorAlleleHet", help = "The minimum percentage of t
 parser.add_argument("-S", "--Support", help = "Then minimum number of supporting reads for alleles to be called (default = 3)", type = int, default = 3)
 parser.add_argument("-R", "--RefUnitsMin", help = "The minimum number of SSR units in a reference SSR (default = 4)", type=int, default = 4)
 parser.add_argument("-P", "--PopUnitsMin", help = "The minimum SSR repeat number allowed within the population. (default = 3)", type=int, default = 3)
-parser.add_argument("-B", "--BoarderingSize", help = "The number of boardering nucleotides on each side of the SSR that must match the reference for a read to be used to support an allelic call (default = 20)", type=int, default= 20)
+parser.add_argument("-B", "--BorderSeq", help = "The number of boardering nucleotides on each side of the SSR that must match the reference for a read to be used to support an allelic call (default = 20)", type=int, default= 20)
 parser.add_argument("-s", "--spuriousAlleleRemoval", help = "If the reads supporting the 3rd most supported allele divided by the total reads supporting the first 2 alleles is equal to or greater than this, the call will be ambiguous.", type=float, default = .1)
 parser.add_argument("-m", "--mismatch", help = "The number of mismatch allowance for each flanking region. Insertions, deletions, and substitutions considered (default = 0)", type = int, default = 0)
 parser.add_argument("-N", "--NameSize", help = "The number of characters to be printed from each SAM file name in the output table (default = 100)", type= int, default = 100)
@@ -72,7 +72,7 @@ flankOffset = args.WindowOffset
 minRefFreq = args.RefUnitsMin
 minSSRfreq = args.PopUnitsMin 
 minNumReads = args.Support 
-numFlankNucs = args.BoarderingSize
+numFlankNucs = args.BorderSeq
 nameSize = args.NameSize
 refFilter = args.FilterDataLoci
 qualityFilter = args.QualityFilter
