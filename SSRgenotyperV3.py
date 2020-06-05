@@ -204,7 +204,9 @@ def process2alleles(alleleData):
     allele2Support = alleleData[1][1]
     ratio = allele2Support/(allele1Support + allele2Support)
     if ratio >= majorMinorRatio:
-        return(str(alleleData[0][0]) + "," + str(alleleData[1][0]))
+        sortedAlleles = sorted([alleleData[0][0], alleleData[1][0]])
+        #smallest first
+        return(str(sortedAlleles[0]) + "," + str(sortedAlleles[1]))
     else:
         #reported as homo in table and in stats
         return(str(alleleData[0][0]) + "," + str(alleleData[0][0]))
