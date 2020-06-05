@@ -41,7 +41,7 @@ parser.add_argument("-W", "--WindowOffset", help = "Offset on each side of the r
 parser.add_argument("-F", "--FilterDataLoci", help = "The maximum missing data threshold for reporting an SSR locus, between 0 and 1 (default = 1)", type=float, default = 1)
 parser.add_argument("-f", "--filterDataSam", help = "The maximum missing data threshold for reporting an individual, between 0 and 1 (default = 1)", type=float, default = 1)
 parser.add_argument("-Q", "--QualityFilter", help = "Only Reads with the equal to or greater than the specified mapping quality are used to support genotype calling (default = 45)", type=int, default=45)
-parser.add_argument("-G", "--Genepop", help = "Create genepop file", nargs='?')
+parser.add_argument("-G", "--Genepop", help = "Create genepop file", action='store_true')
 parser.add_argument("-L", "--LinkageMapFile", help = "Output a table showing relation to two parents. Make sure the first 2 SAM file names are the parents. Value given is fraction of 2nd most common allele required to infer missing parent", nargs='?', type=float, const=.3)
 
 
