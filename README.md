@@ -117,9 +117,9 @@ The basic output file is a tab delimited table with SSR names (and position) in 
 
 The missing data in this file provide addition information as to why the genotype was coded as missing.  Specifically missing data is coded as either "0,-1", "0,-2", "0,-3", "0,-4", where the second number codes for why no genotypes were called:
 
-0,-1: No SSR motif was identified in the modified reference sequence.\
+0,-1: The reference SSR was not evaluated by SSRgenotyper for one of several possible reasons, including the reference sequence was soft masked or the repeat was not a di-, tri- or tetranucleotide repeat , see also --RefUnitsMin.\
 0,-2: No reads mapped to the SSR locus.\
-0,-3: More than expected two alleles were found.  See “--spuriousAlleleRemoval”. \
+0,-3: More than the expected two alleles were identified in the mapped reads, see also “--spuriousAlleleRemoval” \
 0,-4: Insufficient reads were identified to support calling an allele. The minimum number of supporting reads need to support a call is determined by “--Support”.
 
 ### The .ssrstat file
