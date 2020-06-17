@@ -580,7 +580,7 @@ def makeMap(outputDf):
         p1 = r[1][0]
         p2 = r[2][0]
         #both missing
-        if r[1][0] == 0 and r[2][0] == 0:
+        if r[1][0] == '0' and r[2][0] == '0':
             continue
         #check if het, returns true if het
         elif checkHet(r[1]) or checkHet(r[2]):
@@ -588,11 +588,11 @@ def makeMap(outputDf):
         #check if A and B are same (only compare first num b/c won't be het)
         elif r[1][0] == r[2][0]:
             continue
-        elif r[1][0] == 0:
+        elif r[1][0] == '0':
             p1 = parentguess(r[2][0],r)
             if p1 == None:
                 continue
-        elif r[2][0] == 0:
+        elif r[2][0] == '0':
             p2 = parentguess(r[1][0],r)
             if p2 == None:
                 continue
