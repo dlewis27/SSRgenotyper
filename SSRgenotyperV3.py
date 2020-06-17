@@ -5,7 +5,6 @@ Created on Wed Dec 11 14:02:07 2019
 @author: Dan-L
 """
 
-
 #find fasta repeats
 #reverse complelment taken into account (SAM already changes it to reverse comp)
 #single letter repeats are removed (i.e. GGGG)
@@ -77,8 +76,7 @@ nameSize = args.NameSize
 refFilter = args.FilterDataLoci
 qualityFilter = args.QualityFilter
 debugName = args.AlignmentShow
-#if args.Map:
-#    doMap = True
+
 ambiguousSlavageThreshold = args.spuriousAlleleRemoval
 mismatch = args.mismatch
 
@@ -245,7 +243,6 @@ def printResults(resultArray):
             #procced as if 2 alleles
             return(process2alleles(alleleData))
 
-
     return "ERROR"
 
 def getStats(df):
@@ -270,7 +267,6 @@ def getStats(df):
     return results
     
 def writeStats(df, runtime, refProcessTime, totalSeqs, foundSeqs):
-    #get stuff from outputDf
     stats = getStats(df)
     
     statOut = open(outFile + ".ssrstat", "w")
@@ -338,9 +334,8 @@ def debugProcessSamString(samString, refInput):
 
 def processSams(refData, outputDict, inSamFiles):
     #inSamFiles is list
-    #split inSamFiles accross nodes?
+    #split inSamFiles accross nodes - do in future
     # make list of sam files formed from N and then compare, print warning
-    #nSamList = []
     for samFile in inSamFiles:
         samFile = samFile.rstrip("\n")
         samData = prepSam(samFile)
@@ -361,7 +356,6 @@ def processSams(refData, outputDict, inSamFiles):
         outputDict[samName] = colToAppend
         print("processed SAM file:", samFile)
 
-
 def searchRef(refDict, outputDict):
     print("processing SsrReference")
     refData = {}
@@ -372,7 +366,6 @@ def searchRef(refDict, outputDict):
         refPattern2, refNumRepeats2, flankL2, flankR2 = getRefSeqPattern(refName, 2)
         refPattern3, refNumRepeats3, flankL3, flankR3 = getRefSeqPattern(refName, 3)
         refPattern4, refNumRepeats4, flankL4, flankR4 = getRefSeqPattern(refName, 4)
-
         
         if (refNumRepeats2 == None):
             refNumRepeats2 = 0
@@ -477,8 +470,7 @@ def debug2(debugName):
             b2 = b.rstrip("\n")
             output += (b2 + "\n")
     with open(markerName + '-' + samFileName +".txt", "w" ) as w:
-        w.write(output)
-        
+        w.write(output)     
         
 def debug(debugName):
     output="ERROR"
@@ -534,7 +526,7 @@ def parentguess(known, r):
     allele = {}
     total = (len(r)-3)*2
     for e in r[4:]:
-        if e[0] != 0:
+        if e[0] != '0':
             if e[0] not in allele:
                 allele[e[0]] = 1
             else:
@@ -544,21 +536,19 @@ def parentguess(known, r):
             else:
                 allele[e[1]] += 1
     alleleSorted = sorted(allele.items(), key=lambda x: x[1], reverse = True)
+    
+    if len(alleleSorted) == 0:
+        return None
     if alleleSorted[0][0] != known:
         if alleleSorted[0][1]/ total >= args.LinkageMapFile:
             parentLociGuess +=1
             return alleleSorted[0][0]
     else:
-        if alleleSorted[1][1]/ total >= args.LinkageMapFile:
-            parentLociGuess +=1
-            return alleleSorted[1][0]
-        
-    
-        
-    #find missing parent, threshhold
-    #return same thing or diff allele
-    #work out hetero cases
-    #if nothing change, return parent
+        if len(alleleSorted) > 1:
+            if alleleSorted[1][1]/ total >= args.LinkageMapFile:
+                parentLociGuess +=1
+                return alleleSorted[1][0]
+
 def checkHet(li):
     if li[0] == '0':
         return False
@@ -585,7 +575,6 @@ def makeMap(outputDf):
             newRow.append(element.split(','))
         listTable.append(newRow)
     
-    #
     for r in listTable:
         linkMapRow =[r[0]]
         p1 = r[1][0]
@@ -607,7 +596,7 @@ def makeMap(outputDf):
             p2 = parentguess(r[1][0],r)
             if p2 == None:
                 continue
-        #procced normally stuff
+        #procced normally with stuff
         for e in r[1:]:
             if e[0] == p1 and e[1] == p1:
                 linkMapRow.append('A')
@@ -618,8 +607,7 @@ def makeMap(outputDf):
             else:
                 linkMapRow.append('-')
         linkMap.append(linkMapRow)
-        
-        
+             
     #transform newTableAsList to newTable
     newDf = pd.DataFrame(linkMap)
         #get headers from old table
@@ -667,9 +655,6 @@ def isNotMono(row):
 def removeMonomorph(df):
     return df[df.apply(isNotMono,1)]
 
-
-
-
 def createGenePop(outputDf):
     print("creating genePopFile")
     #first line is title
@@ -705,7 +690,6 @@ def createGenePop(outputDf):
 
 def main():
     if debugName != "":
-        #debug(debugName)
         debug2(debugName)
         return
     
@@ -715,7 +699,6 @@ def main():
     refData = searchRef(refDict, outputDict)
     totalSeqs = len(refData)
     foundSeqs = totalSeqs - sum(x == 0 for x in refData.values())
-    #found = size(refData)- refData key = 0
     refProcessTime = str(round((time.time() - startTime)/60, 2))
     print("processed SsrReference in:", refProcessTime, "minutes")
     #process Sams
@@ -729,7 +712,6 @@ def main():
     if args.Genepop:
         a = copy.deepcopy(outputDf)
         createGenePop(a)
-    #pop.to_csv(outFile + ".pop", sep= '\t')
     if args.LinkageMapFile:
         b = copy.deepcopy(outputDf)
         makeMap(b)
