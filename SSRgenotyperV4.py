@@ -290,7 +290,7 @@ def writeStats(df, runtime, refProcessTime, totalSeqs, foundSeqs):
     totSam = len(samFiles)
     statOut.write("Total loci reported: " + str(df.shape[0]) + "\n")
 
-    statOut.write("Total Sam files reported: " + str(numSam) + " of " + str(totSam) + " (" + str(round((numSam/totSam) *100, 2)) + "%)\n")
+    statOut.write("Total SAM files reported: " + str(numSam) + " of " + str(totSam) + " (" + str(round((numSam/totSam) *100, 2)) + "%)\n")
     statOut.write("Total number of genotypes called: " + str(stats['homo']+stats['het']) + "\n") # give percentages as well
     statOut.write("\tTotal Homozygous calls: " + str(stats['homo']) + "\n")
     statOut.write("\tTotal Heterozygous calls: " + str(stats['het']) + "\n")
@@ -298,7 +298,7 @@ def writeStats(df, runtime, refProcessTime, totalSeqs, foundSeqs):
     statOut.write("\n--Error codes--\n")
     statOut.write("(-1) No SSR found in reference (counted for each SAM file): " + str(stats['e1']) + "\n")
     statOut.write("(-2) No reads mapped to marker: " + str(stats['e2']) + " #These are missing genotypes due to the lack any mapped reads\n")
-    statOut.write("(-3) Ambigous (more than 2 alleles found): " + str(stats['e3']) + " #We expect 2 alleles in a true diploid, these are genotypes that were deemed ambiguous (i.e., the 3rd allele was greater than the spurious threshold)\n")
+    statOut.write("(-3) Ambiguous (more than 2 alleles found): " + str(stats['e3']) + " #We expect 2 alleles in a true diploid, these are genotypes that were deemed ambiguous (i.e., the 3rd allele was greater than the spurious threshold)\n")
     statOut.write("(-4) Not enough coverage to call: " + str(stats['e4']) + " #These are missing genotypes due to insufficient read coverage (per the -S argument) – reads mapped but they didn’t reach the support threshold\n")
     
     statOut.write("RunTime: " + str(runtime) + " minutes" + "\n")
@@ -639,7 +639,7 @@ def makeMap(outputDf):
     total = numA + numB + numH
     global parentLociGuess
     global mapStatString
-    mapStatString = '\n--Map Stats--\n' + 'Total loci reported: ' + str(newDf.shape[0]) + '\n' + 'note: percent calulated by (count / (A + B + H)), ignores first 2 SAM files (parents)\n'+'Count A: ' + str(numA) + ' (' + str(round(numA/total*100, 2))+ '%)\n'+'Count B: '+ str(numB) + ' (' + str(round(numB/total*100, 2))+ '%)\n'+'Count H: ' + str(numH) + ' (' + str(round(numH/total*100, 2))+ '%)\n'+'Count -: ' + str(numDash) + ' #Missing genotypes\n'+'Number of parental genotype imputed: ' + str(parentLociGuess) + '#genotypes that were imputed for one of the parents based on the -L argument\n'
+    mapStatString = '\n--Map Stats--\n' + 'Total loci reported: ' + str(newDf.shape[0]) + '\n' + 'note: percent calulated by (count / (A + B + H)), ignores first 2 SAM files (parents)\n'+'Count A: ' + str(numA) + ' (' + str(round(numA/total*100, 2))+ '%)\n'+'Count B: '+ str(numB) + ' (' + str(round(numB/total*100, 2))+ '%)\n'+'Count H: ' + str(numH) + ' (' + str(round(numH/total*100, 2))+ '%)\n'+'Count -: ' + str(numDash) + ' #Missing genotypes\n'+'Number of parental genotypes imputed: ' + str(parentLociGuess) + '#genotypes that were imputed for one of the parents based on the -L argument\n'
 
 def isNotMono(row):
     row = row[3:]
