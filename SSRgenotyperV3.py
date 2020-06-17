@@ -560,6 +560,8 @@ def parentguess(known, r):
     #work out hetero cases
     #if nothing change, return parent
 def checkHet(li):
+    if li[0] == '0':
+        return False
     if li[0] != li[1]:
         return True
     else:
