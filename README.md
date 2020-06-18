@@ -40,7 +40,7 @@ We trim and quality control our reads with [Trimmomatic](https://github.com/timf
 
 ### Map the Illumina reads to the modified reference.fasta (paired-end reads process shown)
 
-`for forward_file in *_1P.fq.gz; do name=`echo $forward_file | sed 's/_1P.fq.gz//\'`; bwa mem -M ../reference/my_modified_Reference.fasta ${name}_1P.fq.gz ${name}_2P.fq.gz -o $name.sam; done`
+`for forward_file in *_1P.fq.gz; do name=echo $forward_file | sed 's/_1P.fq.gz//\'`; bwa mem -M ../reference/my_modified_Reference.fasta ${name}_1P.fq.gz ${name}_2P.fq.gz -o $name.sam; done`
 
 *after trimming with Trimmomatic each sample has a *_1P.fq.gz and *_2P.fq.gz file
 
