@@ -120,7 +120,7 @@ The missing data in this file provide addition information as to why the genotyp
 0,-1: The reference SSR was not evaluated by SSRgenotyper for one of several possible reasons, including the reference sequence was soft masked or the repeat was not a di-, tri- or tetranucleotide repeat , see also --RefUnitsMin.\
 0,-2: No reads mapped to the SSR locus.\
 0,-3: More than the expected two alleles were identified in the mapped reads, see also “--spuriousAlleleRemoval”. \
-0,-4: Insufficient reads were identified to support calling an allele. The minimum number of supporting reads need to support a call is determined by “--Support”.
+0,-4: Insufficient reads were identified to support calling an allele. The minimum number of supporting reads needed to support a call is determined by “--Support”.
 
 ### The .ssrstat file
 This file includes basic run and genotyping statistics, including a listing of the positional and optional arguments selected as well as various run statistics. The statistics calculated for each of the various output files types (.ssr, .pop, .map) take into account the missing data and spurious allele filters. The stats reported include total number of SAM files (individual) reported, total number of SSR loci reported, total number of genotypes called (separated as homozygous and heterozygous calls) and the percentage of missing calls.
