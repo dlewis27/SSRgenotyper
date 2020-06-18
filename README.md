@@ -16,10 +16,10 @@ interruptions(max_difference_between_2_SSRs):        100\
 GFF:                                                     true
 
 ## 2. Modify the MISA produced gff files as follows:
-### Remove any compound SSRs and calculates how much flanking sequence is available at each SSR locus
+### Remove any compound SSRs and calculate how much flanking sequence is available at each SSR locus
 `for i in *.gff; do grep -v "compound" $i | awk '{if ($5-$4 >10 && $5-$4 <50) print $1 "\t" $4-100 "\t" $5+100}' > $i.mod.gff; echo "processing $i"; done`
 
-### Concatenated the modified gff files:
+### Concatenate the modified gff files:
 `for i in *.mod.gff; do cat $i >> cat.gff; echo "processing $i"; done`
 
 ### Remove SSRs that do not have sufficient flanking sequence:
