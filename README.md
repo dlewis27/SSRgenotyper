@@ -113,7 +113,7 @@ Output file types\
 ## Output files
 
 ### The .ssr file 
-The basic output file is a tab delimited table with SSR names (and position) in rows and the names of the SAM files (individuals) as column names. The genotypes are called as alleles that reflect the number of repeat units found at each SSR locus.  For example, a "9,9" genotypic call reflects a homozygote where all the reads mapping to the SSR locus had a repeat unit of “9”.  Similarly, a “9,7” genotypic call reflects a heterozygote where reads with both repeat numbers of “9” and “7” were identified in the read mapping. 
+The basic output file is a tab delimited table with SSR names (and position) in rows and the names of the SAM files (individuals) as column names. The genotypes are called as alleles that reflect the number of repeat units found at each SSR locus.  For example, a "9,9" genotypic call reflects a homozygote where all the reads mapping to the SSR locus had a repeat unit of “9”.  Similarly, a “7,9” genotypic call reflects a heterozygote where reads with both repeat numbers of “7” and “9” were identified in the read mapping. 
 
 The missing data in this file provide addition information as to why the genotype was coded as missing.  Specifically missing data is coded as either "0,-1", "0,-2", "0,-3", "0,-4", where the second number codes for why no genotypes were called:
 
