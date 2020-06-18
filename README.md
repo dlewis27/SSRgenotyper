@@ -9,7 +9,7 @@ SSRgenotyper requires a modified reference which lists each targeted SSR with ~1
 ## 1. MISA:
 `perl misa.pl my_Reference.fasta`
 
-#### MISA requires a misa.ini file in the directory where MISA is being executed that should looks like this:
+#### MISA requires a misa.ini file in the directory where MISA is being executed that should look like this:
 
 definition(unit_size,min_repeats):                   2-6 3-4 4-4\
 interruptions(max_difference_between_2_SSRs):        100\
