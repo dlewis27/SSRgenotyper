@@ -38,7 +38,7 @@ parser.add_argument("-W", "--WindowOffset", help = "Window search offset. We do 
 #Data filtering parameters
 parser.add_argument("-F", "--FilterDataLoci", help = "The maximum missing data threshold for reporting an SSR locus. Between 0 and 1. [.30]", type=float, default = .3)
 parser.add_argument("-f", "--filterDataSam", help = "The maximum missing data threshold for reporting an individual (SAM file). Between 0 and 1. [.30]", type=float, default = .3)
-parser.add_argument("-Q", "--QualityFilter", help = "Only Reads with equal to or greater than the specified mapping quality (MAPQ) threshold are utilized in the genotype calling. [45]", type=int, default=45)
+parser.add_argument("-Q", "--QualityFilter", help = "Only reads with equal to or greater than the specified mapping quality (MAPQ) threshold are utilized in the genotype calling. [45]", type=int, default=45)
 parser.add_argument("-N", "--NameSize", help = "This option will limit the number of characters printed in the output table for each SAM file. When using this option make sure that new names will still be unique as SAM files with the same name will result in inaccurate results. [100]", type= int, default = 100)
 #Output file types
 parser.add_argument("-G", "--Genepop", help = "Ouputs a genepop formated file.", action='store_true')
