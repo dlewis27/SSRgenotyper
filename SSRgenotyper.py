@@ -614,7 +614,7 @@ def makeMap(outputDf):
     del headers[1:3]
     newDf.columns = headers
     
-    newDf.to_csv(outFile + ".map", sep= "\t")
+    newDf.to_csv(outFile + ".map", sep= "\t", index=False)
     
     #append to stats, newDf is link map
     numA =0
@@ -707,7 +707,7 @@ def main():
         outputDf = filterTable(outputDf)
     if filterDataSam != 1:
         outputDf = filterTableSam(outputDf)
-    outputDf.to_csv(outFile + ".ssr", sep= "\t")
+    outputDf.to_csv(outFile + ".ssr", sep= "\t", index=False)
     if args.Genepop:
         a = copy.deepcopy(outputDf)
         createGenePop(a)
