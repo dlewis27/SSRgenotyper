@@ -108,7 +108,7 @@ Output file types\
 
 
 ## Example
-`python3 SSRgenotyper.py my_modified_reference.fasta SamFiles.txt OutputFileName -M 0.30 -S 6 -B 3 -F 0.20 -f 0.30 -Q 60 -s 0.10 -G `
+`python3 SSRgenotyper.py SsrReferenceFile.fasta SamFiles.txt OutputFileName -M 0.30 -S 6 -B 3 -F 0.20 -f 0.30 -Q 60 -s 0.10 -G `
 
 ## Output files
 
