@@ -2,7 +2,7 @@
 
 Many programs can identify simple sequence repeats (SSRs) in genomic data. SSRgenotyper extends SSR identification to genotype calling across multiple individuals in diversity panels and mapping populations. SSRgenotyper will find SSR motifs of lengths 2, 3 and 4 from SAM files and a modified reference fasta. Mononucleotide SSRs and soft masked sequences are excluded during the analysis process. SSRgenotyper has only been tested on diploid and allopolyploid organisms - use with caution on autopolyploids. Several outputs are possible including a simple table with the SSR marker name, position and SSR alleles (defined by the repeat number of the repeated motif). Specific output files include a Genepop formatted file for genetic diversity analyses and a traditional A, H, B mapping file output - phased to the parents of the population for bi-parental linkage mapping populations. Questions regarding usage can be sent to ssrgenotyperhelp@gmail.com.
 
-SSRgenotyper requires a modified reference which lists each targeted SSR with ~100 bp of flanking sequence. The modified reference can be easily created using a combination of easy to use bioinformatic tools, specifically [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip), [Samtools](https://github.com/samtools/samtools) and [Bedtools](https://bedtools.readthedocs.io/en/latest/). MISA is run against the genome assembly of the species of interest to identify the location of the putative SSR loci. The reference genome can be a gold standard, chromosomal-scale reference genome or a simple draft assembly consisting of several thousand contigs. Bedtools is then used to extract the targeted SSRs and their flanking sequences. Flanking sequences of ~100 bp upstream and downstream are needed for mapping/genotyping purposes. We refer to the MISA/Bedtools output as the modified reference (below it is referred to as "my_modified_Reference.fasta").
+SSRgenotyper requires a modified reference which lists each targeted SSR with ~100 bp of flanking sequence. The modified reference can be easily created using a combination of easy to use bioinformatic tools, specifically [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip), [Samtools](https://github.com/samtools/samtools) and [Bedtools](https://bedtools.readthedocs.io/en/latest/). MISA is run against the genome assembly of the species of interest to identify the location of the putative SSR loci. The reference genome can be a gold standard, chromosomal-scale reference genome or a simple draft assembly consisting of several thousand contigs. Bedtools is then used to extract the targeted SSRs and their flanking sequences. Flanking sequences of ~100 bp upstream and downstream are needed for mapping/genotyping purposes. We refer to the MISA/Bedtools output as the SsrReferenceFile.fasta.
 
 ## Make the modified reference with MISA and Bedtools:
 
@@ -28,7 +28,7 @@ GFF:                                                     true
 
 ### Use bedtools getfasta to make the modified reference
 
-`bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo my_modified_Reference.fasta`
+`bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo SsrReferenceFile.fasta`
 
 ## 3. Map the Illumina reads to the modified reference
 
@@ -36,11 +36,11 @@ We trim and quality control our reads with [Trimmomatic](https://github.com/timf
 
 ### Index the modified reference file
 
-`bwa index my_modified_Reference.fasta my_modified_Reference.fasta`
+`bwa index SsrReferenceFile.fasta SsrReferenceFile.fasta`
 
 ### Map the Illumina reads to the modified reference.fasta (paired-end reads process shown)
 
-`for forward_file in *_1P.fq.gz; do name=echo $forward_file | sed 's/_1P.fq.gz//\'; bwa mem -M ../reference/my_modified_Reference.fasta ${name}_1P.fq.gz ${name}_2P.fq.gz -o $name.sam; done`
+`for forward_file in *_1P.fq.gz; do name=echo $forward_file | sed 's/_1P.fq.gz//\'; bwa mem -M ../reference/SsrReferenceFile.fasta ${name}_1P.fq.gz ${name}_2P.fq.gz -o $name.sam; done`
 
 *after trimming with Trimmomatic each sample has a *_1P.fq.gz and *_2P.fq.gz file
 
@@ -74,13 +74,13 @@ A file listing all SAM files to be processed is required by SSRgenotyper and can
 
 SSRgenotyper identifies reads mapping to each of the SSRs in the modified reference file for each of the SAM files and makes a genotypic call based on the number of SSR units.  Processing of the SAM files is very fast with minimal memory utilization.
 
-*usage: python3 SSRgenotyper.py <my_modified_reference.fasta> <SamFiles.txt> <OutputFileName*>
+*usage: python3 SSRgenotyper.py <SsrReferenceFile.fasta> <SamFiles.txt> <OutputFileName*>
   
 ## Options
 
 Positional arguments:
 
-**SsrReferenceFile** - This is the my_modified_reference.fasta referred to previously (FASTA)\
+**SsrReferenceFile** - This is the SsrReferenceFile.fasta referred to previously (FASTA)\
 **SamFiles.txt** - Text document with the SAM file names separated by newlines\
 **OutputFileName** - Output file name (".ssr" extension will be added)
 
