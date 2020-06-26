@@ -1,10 +1,10 @@
 # SSRgenotyper
 
-Many programs can identify simple sequence repeats (SSRs) in genomic data. SSRgenotyper extends SSR identification to genotype calling across multiple individuals in diversity panels and mapping populations. SSRgenotyper will find SSR motifs of lengths 2, 3 and 4 from SAM files and a modified reference fasta. Mononucleotide SSRs and soft masked sequences are excluded during the analysis process. SSRgenotyper has only been tested on diploid and allopolyploid organisms - use with caution on autopolyploids. Several outputs are possible including a simple table with the SSR marker name, position and SSR alleles (defined by the repeat number of the repeated motif). Specific output files include a Genepop formatted file for genetic diversity analyses and a traditional A, H, B mapping file output - phased to the parents of the population for bi-parental linkage mapping populations. Questions regarding usage can be sent to ssrgenotyperhelp@gmail.com.
+Many programs can identify simple sequence repeats (SSRs) in genomic data. SSRgenotyper extends SSR identification to genotype calling across multiple individuals in diversity panels and mapping populations. SSRgenotyper will find SSR motifs of lengths 2, 3 and 4 from SAM files and a SSR reference fasta file (SsrReferenceFile.fasta). Mononucleotide SSRs and soft masked sequences are excluded during the analysis process. SSRgenotyper has only been tested on diploid and allopolyploid organisms - use with caution on autopolyploids. Several outputs are possible including a simple table with the SSR marker name, position and SSR alleles (defined by the repeat number of the repeated motif). Specific output files include a Genepop formatted file for genetic diversity analyses and a traditional A, H, B mapping file output - phased to the parents of the population for bi-parental linkage mapping populations. Questions regarding usage can be sent to ssrgenotyperhelp@gmail.com.
 
-SSRgenotyper requires a modified reference which lists each targeted SSR with ~100 bp of flanking sequence. The modified reference can be easily created using a combination of easy to use bioinformatic tools, specifically [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip), [Samtools](https://github.com/samtools/samtools) and [Bedtools](https://bedtools.readthedocs.io/en/latest/). MISA is run against the genome assembly of the species of interest to identify the location of the putative SSR loci. The reference genome can be a gold standard, chromosomal-scale reference genome or a simple draft assembly consisting of several thousand contigs. Bedtools is then used to extract the targeted SSRs and their flanking sequences. Flanking sequences of ~100 bp upstream and downstream are needed for mapping/genotyping purposes. We refer to the MISA/Bedtools output as the SsrReferenceFile.fasta.
+SSRgenotyper requires a SSR reference fasta file which lists each targeted SSR with ~100 bp of flanking sequence. The SSR reference fasta file can be easily created using a combination of easy to use bioinformatic tools, specifically [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip), [Samtools](https://github.com/samtools/samtools) and [Bedtools](https://bedtools.readthedocs.io/en/latest/). MISA is run against the genome assembly of the species of interest to identify the location of the putative SSR loci. The reference genome, referred to below as my_reference.fasta, can be a gold standard, chromosomal-scale reference genome or a simple draft assembly consisting of several thousand contigs. Bedtools is then used to extract the targeted SSRs and their flanking sequences. Flanking sequences of ~100 bp upstream and downstream are needed for mapping/genotyping purposes. We refer to the MISA/Bedtools output as the SsrReferenceFile.fasta.
 
-## Make the modified reference with MISA and Bedtools:
+## Make the SSR reference fasta (SsrReferenceFile.fasta) with MISA and Bedtools:
 
 ## 1. MISA
 `perl misa.pl my_Reference.fasta`
@@ -26,19 +26,19 @@ GFF:                                                     true
 
 `awk '($2 >= 0)' cat.gff > cat_filter1.gff` 
 
-### Use bedtools getfasta to make the modified reference
+### Use bedtools getfasta to make the SsrReferenceFile.fasta
 
 `bedtools getfasta -fi my_Reference.fasta -bed cat_filter1.gff -fo SsrReferenceFile.fasta`
 
-## 3. Map the Illumina reads to the modified reference
+## 3. Map the Illumina reads to the SsrReferenceFile.fasta
 
-We trim and quality control our reads with [Trimmomatic](https://github.com/timflutre/trimmomatic), which produces paired forward (_1P.fq.gz) and a reverse reads files (_2P.fq.gz) for each sample. In our example code below the trimmed reads are then mapped to the modified reference using [BWA](https://github.com/lh3/bwa), however any short read mapping software should work (minimap2, bowtie2, etc.). After mapping the reads, PCR duplicates are removed using [Samtools](https://github.com/samtools/samtools) -markdup. To genotype multiple individuals in a population, each individual should have its own FASTQ file (i.e., one FASTQ per individual, producing one SAM file per individual). The basic steps are as follows:
+We trim and quality control our reads with [Trimmomatic](https://github.com/timflutre/trimmomatic), which produces paired forward (_1P.fq.gz) and a reverse reads files (_2P.fq.gz) for each sample. In our example code below the trimmed reads are then mapped to the SsrReferenceFile.fasta using [BWA](https://github.com/lh3/bwa), however any short read mapping software should work (minimap2, bowtie2, etc.). After mapping the reads, PCR duplicates are removed using [Samtools](https://github.com/samtools/samtools) -markdup. To genotype multiple individuals in a population, each individual should have its own FASTQ file (i.e., one FASTQ per individual, producing one SAM file per individual). The basic steps are as follows:
 
-### Index the modified reference file
+### Index the SsrReferenceFile.fasta file
 
 `bwa index SsrReferenceFile.fasta SsrReferenceFile.fasta`
 
-### Map the Illumina reads to the modified reference.fasta (paired-end reads process shown)
+### Map the Illumina reads to the SsrReferenceFile.fasta (paired-end reads process shown)
 
 `for forward_file in *_1P.fq.gz; do name=echo $forward_file | sed 's/_1P.fq.gz//\'; bwa mem -M ../reference/SsrReferenceFile.fasta ${name}_1P.fq.gz ${name}_2P.fq.gz -o $name.sam; done`
 
