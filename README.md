@@ -80,7 +80,7 @@ SSRgenotyper identifies reads mapping to each of the SSRs in the modified refere
 
 Positional arguments:
 
-**SsrReferenceFile** - This is the SsrReferenceFile.fasta referred to previously (FASTA)\
+**SsrReferenceFile.fasta** - This is the SsrReferenceFile.fasta referred to previously (FASTA)\
 **SamFiles.txt** - Text document with the SAM file names separated by newlines\
 **OutputFileName** - Output file name (".ssr" extension will be added)
 
