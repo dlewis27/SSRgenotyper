@@ -72,7 +72,7 @@ A file listing all SAM files to be processed is required by SSRgenotyper and can
 
 ## How SSRgenotyper Works
 
-SSRgenotyper identifies reads mapping to each of the SSRs in the modified reference file for each of the SAM files and makes a genotypic call based on the number of SSR units.  Processing of the SAM files is very fast with minimal memory utilization.
+SSRgenotyper identifies reads mapping to each of the SSRs identified in the SsrReferenceFile.fasta for each of the SAM files and makes a genotypic call based on the number of SSR units. Processing of the SAM files is very fast with minimal memory utilization.
 
 *usage: python3 SSRgenotyper.py <SsrReferenceFile.fasta> <SamFiles.txt> <OutputFileName*>
   
@@ -80,7 +80,7 @@ SSRgenotyper identifies reads mapping to each of the SSRs in the modified refere
 
 Positional arguments:
 
-**SsrReferenceFile.fasta** - This is the SsrReferenceFile.fasta referred to previously (FASTA)\
+**SsrReferenceFile.fasta** - This is a fasta file consisting of the SSRs and flanking sequence\
 **SamFiles.txt** - Text document with the SAM file names separated by newlines\
 **OutputFileName** - Output file name (".ssr" extension will be added)
 
