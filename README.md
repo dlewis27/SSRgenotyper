@@ -36,7 +36,7 @@ We trim and quality control our reads with [Trimmomatic](https://github.com/timf
 
 ### Index the SsrReferenceFile.fasta file
 
-`bwa index SsrReferenceFile.fasta SsrReferenceFile.fasta`
+`bwa index SsrReferenceFile.fasta`
 
 ### Map the Illumina reads to the SsrReferenceFile.fasta (paired-end reads process shown)
 
