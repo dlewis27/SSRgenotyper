@@ -23,7 +23,7 @@ from datetime import datetime
 import copy
 
 parser = argparse.ArgumentParser()
-parser.add_argument("SsrReferenceFile.fasta", help = "The modified reference file (FASTA)")
+parser.add_argument("SsrReferenceFile", help = "The modified reference file (FASTA)")
 parser.add_argument("SamFiles", help = "Text document with the SAM file names separated by newlines")
 parser.add_argument("OutputFile", help = "Output file name (\".ssr\") extension will be added")
 parser.add_argument("-M","--MinorAlleleHet", help = "The minimum percentage of the minor allele for a genotype to be considered heterozygous. If two alleles are found but the percentage of minor allele reads is below this cutoff the genotype will be called as a homozygote for the major allele. Setting this argument to 0.51 will produce only homozygous genotypic calls. Between 0 and 1. [0.20]", type=float, default = .2)
