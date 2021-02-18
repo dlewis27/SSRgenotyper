@@ -70,7 +70,7 @@ This will remove reads with mapping quality less than 45 as well as unnessary he
 
 A file listing all SAM files to be processed is required by SSRgenotyper and can be produced with:
 
-`ls *.Q45 > samFiles.txt`
+`ls *.Q45.sam > samFiles.txt`
 
 ## How SSRgenotyper Works
 
