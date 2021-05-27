@@ -4,7 +4,7 @@ Many programs can identify simple sequence repeats (SSRs) in genomic data. SSRge
 
 SSRgenotyper requires a SSR reference fasta file which lists each targeted SSR with ~100 bp of flanking sequence. The SSR reference fasta file can be easily created using a combination of easy to use bioinformatic tools, specifically [MISA](https://webblast.ipk-gatersleben.de/misa/misa_sourcecode_22092015.zip), [Samtools](https://github.com/samtools/samtools) and [Bedtools](https://bedtools.readthedocs.io/en/latest/). MISA is run against the genome assembly of the species of interest to identify the location of the putative SSR loci. The reference genome, referred to below as my_reference.fasta, can be a gold standard, chromosomal-scale reference genome or a simple draft assembly consisting of several thousand contigs. Bedtools is then used to extract the targeted SSRs and their flanking sequences. Flanking sequences of ~100 bp upstream and downstream are needed for mapping/genotyping purposes. We refer to the MISA/Bedtools output as the SsrReferenceFile.fasta.
 
-SSRgenotyper requires python libraries [regex](https://anaconda.org/conda-forge/regex) and [biopython](https://anaconda.org/anaconda/biopython).  An easy way to install these is through [conda](https://docs.conda.io/en/latest/).
+SSRgenotyper requires python libraries [regex](https://anaconda.org/conda-forge/regex) and [biopython](https://anaconda.org/anaconda/biopython).  An easy way to install these is through [conda](https://docs.conda.io/en/latest/). SSRgenotyper uses python 3.7. Using earlier versions may result in errors. 
 
 ## Make the SSR reference fasta (SsrReferenceFile.fasta) with MISA and Bedtools:
 
