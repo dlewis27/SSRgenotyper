@@ -601,7 +601,7 @@ def makeMap(outputDf):
                 linkMapRow.append('A')
             elif e[0] == p2 and e[1] == p2:
                 linkMapRow.append('B')
-            elif (e[0] == p1 and e[1] == p2) or (e[0] == p2 and e[1] == p2):
+            elif (e[0] == p1 and e[1] == p2) or (e[0] == p2 and e[1] == p1):
                 linkMapRow.append('H')
             else:
                 linkMapRow.append('-')
